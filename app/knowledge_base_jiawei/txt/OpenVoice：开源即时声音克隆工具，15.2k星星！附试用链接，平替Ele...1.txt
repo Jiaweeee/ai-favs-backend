@@ -1,0 +1,89 @@
+OpenVoice：开源即时声音克隆工具，15.2k星星！附试用链接，平替ElevenLabs
+   
+    mp.weixin.qq.com开源AI 开源AI项目落地
+    
+    
+     
+     项目简介 
+     
+     
+     OpenVoice是由MyShell推出的即时声音克隆工具，能够准确地复制参考音色并生成多种语言和口音的语音。它支持灵活的声音风格控制，包括情绪、口音、节奏、停顿和语调。 
+     此外，OpenVoice实现了跨语言的零样本声音克隆，即无需预先在大型多语种训练数据集中出现参考语音和生成语音的语言。 
+     
+     
+     扫码加入交流群 
+     获得更多技术支持和交流 
+     （请注明自己的职业） 
+     
+     
+      
+     
+     
+     
+     
+     优势 
+     
+     
+     1.准确的音色克隆。OpenVoice能够准确克隆参考音色，并生成多种语言和口音的语音。 
+     2.灵活的声音风格控制。OpenVoice允许对声音风格进行细粒度的控制，如情感和口音，以及其他风格参数，包括节奏、暂停和语调。 
+     3.零样本跨语言声音克隆。生成的语音的语言或参考语音的语言都不需要在庞大的多语言训练数据集中被提出。 
+     
+     
+     Demo 
+     
+      
+       
+        
+        视频加载失败，请刷新页面再试 
+         刷新   
+        
+       
+     
+     
+     使用方法 
+     
+     
+     1.在MyShell中使用 
+     直接使用即时语音克隆和TTS服务。 
+     https://github.com/myshell-ai/OpenVoice/blob/main/docs/USAGE.md#use-in-myshell 
+     2.快速体验 
+     https://huggingface.co/spaces/myshell-ai/OpenVoice 
+     3.在Linux中安装 
+     https://github.com/myshell-ai/OpenVoice/blob/main/docs/USAGE.md#linux-install 
+     
+     
+     项目链接 
+     
+     
+     https://github.com/myshell-ai/OpenVoice 
+     
+    关注「开源AI项目落地」公众号 
+     
+      
+       
+        
+         
+          
+           
+            
+             
+            
+            
+             开源AI项目落地 
+             
+               分享有价值的开源项目，并且致力于Ai项目的落地。 
+              
+              77篇原创内容 
+              
+              
+            
+           
+          
+         
+           公众号 
+          
+         
+        ， 
+
+查看原网页: http://mp.weixin.qq.com/s?__biz=MzkyMTYwNjgwNA==&mid=2247484583&idx=1&sn=636262b68188b6c98d8338e90568f7a0&chksm=c1804b5cf6f7c24ad1fdcb3b5da9a86067ab77519dc287b14e6d6cfd1aa1c54e8555d9951c08&mpshare=1&scene=1&srcid=0326HrSVCBimrdVotNIPYD6P&sharer_shareinfo=c4d0b24620ab1efdcb5fbce9eaecc1c6&sharer_shareinfo_first=c4d0b24620ab1efdcb5fbce9eaecc1c6#rd
+Cubox 链接: https://cubox.pro/my/card?id=7172658405339826464

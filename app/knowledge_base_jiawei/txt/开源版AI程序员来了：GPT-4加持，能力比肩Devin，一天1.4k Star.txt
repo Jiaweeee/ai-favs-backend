@@ -1,0 +1,133 @@
+开源版AI程序员来了：GPT-4加持，能力比肩Devin，一天1.4k Star
+   
+    mp.weixin.qq.com机器之心
+    
+    
+     
+      机器之心报道 
+      
+      作者：泽南、小舟 
+      
+     
+     
+     
+       不到 24 小时，Star 量突破 1400。 
+      
+     
+    最近，有很多人在为 AI 代替自己的工作而担忧。 
+    上个月火遍 AI 圈的「首位 AI 程序员」Devin，利用大模型能力已经掌握了全栈技能，仅需要人类给出自然语言指令，就可以自动完成复杂的代码任务。 
+    Devin 展示的能力非常惊艳，不过这款工具出自走闭源路线的创业公司，现在只有一小部分获得了内测名额的人才能使用。 
+    本周二，来自普林斯顿大学 NLP 组的研究人员放出了 SWE-agent —— 一个开源版 AI 程序员，不到一天就获得了上千的 GitHub Star 量。 
+     
+    SWE-agent 是一款用于自主解决 GitHub 存储库中问题的新系统。它在 SWE-bench 上获得了与 Devin 相似的准确度，平均耗时为 93 秒。 
+     
+     
+     项目网站：https://swe-agent.com/ 
+     GitHub：https://github.com/princeton-nlp/SWE-agent 
+     
+    该项目的作者 John Yang 表示，相关论文的预印版也将在 4 月 10 号上传。 
+      
+       
+        
+        视频加载失败，请刷新页面再试 
+         刷新   
+        
+       
+     
+    从原理上看，SWE-agent 通过将大模型（例如 GPT-4）转变为软件工程智能体，可以修复真实 GitHub 存储库中的错误和问题。 
+    在完整的 SWE-bench 测试集上，SWE-agent 解决了 12.29% 的问题，实现了 SOTA 性能。 
+     
+    为了提供开发过程中的自动化，SWE-agent 通过与专用终端交互来工作，它可以打开、搜索文件内容，使用自动语法检查、编辑特定行，也可以编写并执行测试。 
+    该项目的开发者精心设计了 UI 界面，并在 GitHub 上进行了介绍。 
+    智能体 - 计算机接口 (ACI) 
+    研究团队设计了简单的以大模型（LM）为中心的命令和反馈格式，使大模型能够更方便地浏览存储库、查看、编辑和执行代码文件，这被称为智能体 - 计算机接口 (ACI)。研究团队还构建了 SWE 智能体存储库，以便轻松迭代存储库级编码智能体的 ACI 设计。 
+    就像语言模型需要良好的提示工程（prompt engineering）一样，良好的 ACI 设计在使用智能体时会带来更好的结果。没有经过良好调整的 ACI 的基线智能体的表现比 SWE-agent 差得多。 
+    SWE-agent 包含研究团队在智能体 - 计算机接口设计过程中发现的非常有用的功能，包括： 
+    1. 添加一个在发出编辑命令时运行的 linter，如果代码语法不正确，则不会让编辑命令通过。 
+    2. 为智能体提供一个专门构建的文件查看器。研究团队发现此文件查看器在每轮仅显示 100 行时效果最佳，并且该文件编辑器具有上下滚动以及在文件中执行搜索的命令。 
+    3. 为智能体提供专门构建的全目录字符串搜索命令。研究团队发现该工具简洁地列出匹配项非常重要 —— 只需列出至少有一个匹配项的每个文件。该研究表明，向模型显示有关每个匹配的更多上下文对于模型来说太混乱了。 
+    4. 当命令的输出为空时，返回一条消息：「您的命令已成功运行，但未产生任何输出」。 
+    未来发布的论文将详述更多信息。 
+    安装与使用 
+    要使用 SWE-agent，首先要设置好如下条件： 
+    1. 安装 Docker，并在本地启动 Docker； 
+    2. 安装 Miniconda，并使用 conda env create -fenvironment.yml 创建 swe-agent 环境； 
+    3. 使用 conda activate swe-agent 激活； 
+    4. 运行 ./setup.sh 创建 swe-agent docker 镜像； 
+    5. 在此存储库的根目录下创建一个 keys.cfg 文件并填写以下内容： 
+     
+      
+       
+       
+       
+      
+     OPENAI_API_KEY: 'OpenAI API Key Here if using OpenAI Model (optional)'ANTHROPIC_API_KEY: 'Anthropic API Key Here if using Anthropic Model (optional)'GITHUB_TOKEN: 'GitHub Token Here (required)' 
+     
+    SWE-agent pipeline 包含两个步骤： 
+     
+     第一步：SWE-agent 接收输入的 GitHub 问题，并返回尝试修复它的拉取请求（pull request）； 
+     第二步：评估拉取请求以验证它确实解决了问题（目前仅适用于 SWE-bench 基准测试中的问题）。 
+     
+    如果想在整个 SWE-bench 上运行和评估，最简单的方法是使用 x86 机器。 
+     
+      
+       
+       
+      
+     python run.py --model_name gpt4 \  --data_path https://github.com/pvlib/pvlib-python/issues/1603 --config_file config/default_from_url.yaml 
+     
+     
+      
+       
+       
+       
+      
+     python run.py --model_name gpt4 \  --per_instance_cost_limit 2.00 \  --config_file ./config/default.yaml 
+     
+    如果想运行 SWE-bench 中的单个问题，可以使用 --instance_filter： 
+     
+      
+       
+       
+      
+     python run.py --model_name gpt4 \  --instance_filter marshmallow-code__marshmallow-1359 
+     
+     
+      
+     
+     
+      
+       
+        
+         
+          
+           
+            
+             
+            
+            
+             机器之心SOTA模型 
+             
+               追踪 AI 开源进展，探索先进开发实践 
+              
+              198篇原创内容 
+              
+              
+            
+           
+          
+         
+           公众号 
+          
+         
+        ， 
+       
+      
+      
+     
+    ©THE END 
+    转载请联系本公众号获得授权 
+    投稿或寻求报道：content@jiqizhixin.com
+
+查看原网页: http://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2650913244&idx=3&sn=2a9b9412f59edf1e2c90e66b2681b0bd&chksm=84e47da2b393f4b47aea21aef7175a6abb0c5daf57b13a650bccaab4dd3885b6d99abb281194&mpshare=1&scene=1&srcid=0403dyrwHCTUUJS8cBeNVnkD&sharer_shareinfo=2d9628742b4ad94d652619cf728351e0&sharer_shareinfo_first=2d9628742b4ad94d652619cf728351e0#rd
+Cubox 链接: https://cubox.pro/my/card?id=7175053511195888203

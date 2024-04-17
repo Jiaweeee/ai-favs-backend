@@ -1,0 +1,111 @@
+5 Popular Machine Learning Certifications: Your 2024 Guide
+   
+    www.coursera.orgCoursera Staff
+   
+    
+    Machine learning certifications can help you stand out from other candidates for data science and programming jobs. Whether you complete a course or pass an exam, certificates represent accomplishment. They can help you demonstrate your knowledge, experience, and credibility in machine learning. In the following article, you can compare five popular machine learning certifications and learn how to choose one that's right for you.&nbsp; 
+     
+      
+      Certificate vs. certification: what's the difference? 
+      The terms certificate and certification are often used interchangeably. However, they can differ in content, structure, and meaning depending on the offering organization. Certificates typically emphasize training and academic accomplishment whereas certifications indicate professional experience or that you've passed a certification exam that requires specialized skills.&nbsp; 
+      
+      
+       
+      
+     
+    How to choose a machine learning program that's right for you 
+    To identify which learning path is best for your career goals, consider these factors: 
+     
+     Course content. Identifying focus areas for your professional development can help you narrow your choices. Note specific skills you want to gain such as feature engineering, exploratory data analysis, or model evaluation and match them to program descriptions.&nbsp; 
+     
+     
+     Duration. Juggling professional development while working full-time, going to school, or caring for other obligations can be challenging. Make sure the workload and deadlines associated with your chosen learning path feel manageable.&nbsp; 
+     
+     
+     Outcome. Consider why you want to earn a certificate or certification. If you're looking for a new role, browse job postings for positions you're interested in and make a note of requested skills and credentials. Some employers request certifications by name. If many of the qualifications are skill-based or you want to study prior to taking an exam, you may benefit from a certificate program.&nbsp; 
+     
+     
+     Cost. Although it depends on the offering organization, certification prices sometimes include only the exam price. Prior training or study materials may be available at a separate cost. Research what the price of your chosen certificate includes before enrolling and consider whether or not you'll also need instruction.&nbsp; 
+     
+     
+     Prerequisites. If you're looking for an introduction to machine learning, consider selecting a certification program at the beginner level. Beginner-level certificate programs are designed to cover essential concepts to build foundational expertise. Those with background knowledge in the machine learning field may benefit more from intermediate-level or advanced programs that focus on machine learning techniques and technical skills.&nbsp; 
+     
+     
+      
+       
+      
+     
+    5 machine learning certifications and certificates&nbsp; 
+    Both certificates and certifications are valuable tools for advancing your career and building more expertise. In the following list, you’ll find five popular machine learning certificates and certification programs. 
+    1. Andrew Ng’s Machine Learning Specialization&nbsp; 
+    AI visionary Andrew Ng’s Machine Learning Specialization is an online, three-course, educational program designed to help course takers master fundamental AI concepts and develop practical machine learning (ML) skills, such as building and training machine learning models.  
+    The highly-regarded specialization is offered jointly by Stanford University and DeepLearning.AI, and is specifically designed for beginners as well as more advanced course takers. Upon completing the specialization, you will receive a shareable certificate that can be cited on your resume to demonstrate your knowledge and skills to potential employers.&nbsp; 
+    Requirements: The course is suitable for beginners with knowledge of basic coding and high school-level math concepts. 
+     Cost: The course costs $49 per month by subscription to Coursera.&nbsp; 
+     
+      
+       
+      
+     
+    2. IBM Machine Learning Professional Certificate&nbsp; 
+    IBM’s Machine Learning Professional Certificate is an online, six-course educational program that equips course takers with practical ML skills, such as supervised learning, unsupervised learning, neural networks, and deep learning. At the same time, the program also introduces course takers to such specialized topics as time series analysis and survival analysis.&nbsp; 
+    Upon completing the program's six courses, you will be awarded a professional certificate from IBM and Coursera that indicates you have completed the course of study. This certificate can be cited on your resume to indicate your knowledge and skill set to potential employers.&nbsp; 
+    Requirements: There are no prerequisites to take the course, but IBM suggests that you possess some related experience and are at an intermediate knowledge level.&nbsp; 
+     Cost: The course costs $49 per month by subscription to Coursera.&nbsp; 
+     
+      
+       
+      
+     
+    3. AWS Certified Machine Learning - Specialty&nbsp; 
+    Amazon Web Service’s (AWS) Certified Machine Learning - Speciality Certification indicates your expertise in building, training, and running ML models in AWS.&nbsp; 
+    To earn the certification, you must take and pass a 180-minute exam consisting of 65 multiple-choice and response questions. Designed for professional developers and data scientists, the exam tests your understanding of ML algorithms, ability to implement hyperparameter optimization, and perform best practices when training, deploying, and operating machine learning models.&nbsp; 
+    Requirements: The exam is designed for those with at least one year of hands-on experience developing, running, or architecting ML and deep learning workloads on AWS.&nbsp; 
+    Cost: $300 (plus tax)&nbsp; 
+     
+      
+      Prepare for AWS with AWS 
+       You can prepare for this exam by taking a course designed by AWS itself on Coursera.&nbsp; In AWS’ Introduction to Machine Learning on AWS, you’ll explore the services that do the heavy lifting of computer vision, data extraction and analysis, language processing, speech recognition, translation, ML model training, and virtual agents. 
+      
+      
+       
+      
+     
+    4. Google Professional Machine Learning Engineer Certification&nbsp; 
+    Google’s Professional Machine Learning Engineer Certification indicates your expertise in designing, building, and producing machine learning models using Google Cloud and industry-proven techniques. To earn the certification, you must take and pass a two-hour exam consisting of 50-60 multiple-choice questions covering such topics as framing ML problems, architecting ML solutions, and developing ML models. &nbsp;Certifications are valid for two years, after which holders must recertify to maintain certification.&nbsp; 
+    Requirements: There are no formal requirements to take the exam but Google recommends that test takers have three or more years of industry experience and at least one year of experience designing and managing ML solutions in Google Cloud.&nbsp; 
+     Cost: $200 (plus tax)&nbsp; 
+     
+      
+      Get ready with Google 
+      Google’s Professional Machine Learning Engineer certification will signal your expertise in crafting and implementing machine learning solutions with google cloud to potential employers and clients. What better way to prepare for a Google exam than by taking a course offered by Google?&nbsp;  
+      In Google Cloud’s Preparing for Google Cloud Certification: Machine Learning Engineer Professional Certificate, you’ll explore how to design, build, and productionalize ML models to solve business challenges using Google Cloud technologies. 
+      
+      
+       
+      
+     
+    5. University of Washington Machine Learning Specialization&nbsp; 
+    The University of Washington’s Machine Learning Specialization is a four-course online educational program covering the major areas of ML, including prediction, classification, clustering, and information retrieval. Through the course, you’ll also analyze large and complex datasets, create systems that adapt and improve over time, and build intelligent applications that can make predictions from data.&nbsp; 
+    Upon completing the specialization, you will receive a shareable certificate that you can cite on your resume to signal your knowledge and skill set to potential employers.&nbsp; 
+    Requirements: The specialization has no prerequisites but is recommended for those with an intermediate knowledge of the field who possess some related experience.&nbsp;&nbsp; 
+     Cost: The course costs $49 per month by subscription to Coursera. 
+     
+      
+       
+      
+     
+    Hands-on projects to gain experience in machine learning&nbsp; 
+    If you're not yet ready to enroll in a certification program, you can still start practicing your machine-learning skills today. Below, you'll find a list of machine learning projects you can use to learn independently or build your portfolio.&nbsp; 
+     
+     (FREE) ChatGPT Prompt Engineering for Developers 
+     Unsupervised Machine Learning for Customer Market Segmentation  
+     Cervical Cancer Risk Prediction Using Machine Learning 
+     Medical Insurance Premium Prediction with Machine Learning 
+     
+    Read more: 7 Machine Learning Projects to Build Your Skills 
+    Get certified with Coursera&nbsp; 
+    In Andrew Ng’s beginner-friendly Machine Learning Specialization, you’ll master key concepts and gain the practical know-how to quickly and powerfully apply machine learning to challenging real-world problems. If you’re looking to break into AI or build a career in machine learning, then Ng’s recently updated Machine Learning Specialization is an ideal place to start. 
+
+查看原网页: https://www.coursera.org/articles/machine-learning-certification
+Cubox 链接: https://cubox.pro/my/card?id=7177878018268859341

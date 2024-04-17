@@ -1,0 +1,120 @@
+Google Cloud Next ’24：开发者应该关注的8个 AI 重大更新
+   
+    mp.weixin.qq.com稀土君 掘金开发者社区
+    
+    
+     
+     Google Cloud Next ’24 大会正在拉斯维加斯举行，会议为三天，将持续到周四。掘金此次受邀参加，并为掘友带来 Google Cloud 的最新技术进展。点击文末「阅读原文」可查看全场回放。 
+     
+     
+    第一天的 keynote 绝大部分内容围绕生成式 AI 展开，Google 一口气发布了多款生成式 AI 产品，例如 Gemini 1.5 Pro，Gemini Code Assist，视频工具 Google Vids 和图片生成工具 Imagen 2，接下来为掘友带来最值得关注的 8 个 AI 更新。 
+    Gemini 1.5 Pro 
+     
+      
+     
+    
+      Google 宣布最新的生成式 AI 模型 Gemini Pro 1.5 可以在 Vertex AI 平台上公开预览，这款模型模型能处理的上下文最高到 100 万个 token（100 万个 token 相当于约 70万个英文单词或约 3 万行代码），是 Anthropic 的 Claude 3 模型的 4 倍，也是 OpenAI 的 GPT-4 Turbo 最大上下文的 8 倍。大上下文窗口的模型能更好地理解输入数据的整体内容，生成更丰富的上下文响应。 
+     
+    
+      同时 Gemini Pro 1.5 也支持多语言，并且是支持多模态，能理解文本、图像、视频，以及音频流。100 万个 token 可以处理为大约一小时的视频或大约 11 小时的音频。 
+      
+     
+    Gemini Code Assist 
+     
+      
+     
+    
+      Gemini Code Assist 是一款面向企业的 AI 代码补全和辅助工具。这一工具是 Duet AI for Developers 的进化版本，采用了最新的 Gemini 1.5 Pro 模型，为开发者提供了全面的代码库分析、代码生成以及对多个仓库中的私有代码库的支持。 
+     
+    
+      Gemini Code Assist 更多地与 GitHub 的 Copilot Enterprise 竞争，而不是 Copilot 的基础版本。提供了 Google 特有的功能，如支持 100 万 token 的上下文窗口，以及企业可以基于内部代码库对 Code Assist 进行微调。支持位于本地、GitLab、GitHub 和 Atlassian 的 BitBucket 等服务上的代码库。当前功能处于预览阶段，支持 VS Code 和 JetBrains 等流行编辑器的插件。 
+     
+    
+      Google 还发布了 CodeGemma，这是 Gemma 系列中，专为代码生成和辅助调整的新开源模型。 
+     
+    Google Vids 
+     
+      
+     
+    
+      另一个重磅新闻是发布了一款名为 Google Vids 的新型 AI 视频创作工具。这款工具将成为 Google Workspace 生产力套件的一部分。Google Vids 的设计理念是提供一个视频创作的工具。Google Workspace 的副总裁 Aparna Pappu 在介绍这款工具时表示，Google Vids将是用户的视频编辑、写作和制作的得力助手，能够将用户的市场营销文案、图片等资产转换成让人印象深刻的视频。 
+     
+     
+      
+     
+    
+      Google Vids 的特色之一是支持实时协作，团队成员可以同时在浏览器中共同创作视频。Google Vids 的使用成本很低，用户通过输入视频描述的 prompt，然后访问 Google Drive 中的文件或使用 Google 提供的素材内容，AI 随后会基于用户的想法创建视频的故事板。用户可以重新排列视频的不同部分、添加过渡效果、选择模板并插入音轨，包括录制音频或添加脚本由预设的声音朗读。 
+     
+    
+      目前，Google Vids正在有限的测试阶段。它将在 6 月份向 Google Labs 的更多测试者开放，并最终将向拥有 Gemini for Workspace 订阅的客户提供接口。 
+     
+    Imagen 2 
+     
+      
+     
+    
+      Imagen 2 是一款集成在其Vertex AI开发平台中的增强型图像生成工具。尽管 Google 前段时间在图像生成方面获得较大的争议，但 Imagen 2 作为一个模型系列，提供了一系列新功能：包括根据文本提示创建和编辑图像，渲染多语言文本、LOGO 和标志，以及在现有图像上叠加这些元素。 
+     
+    
+      此外，Imagen 2还引入了两项新功能：inpainting 和 outpainting，这些功能与 adobe 的 firefly 类似，可以用来移除图像中不需要的部分、添加新组件以及扩展图像边界以创建更宽阔的视野。同时该工具现在能够根据文本提示创建短暂的四秒视频片段，类似于Runway、Pika 和 Irreverent Labs 等产品的视频剪辑生成工具。 
+     
+    
+      为了缓解公众对生成 deepfake 内容的担忧，Google在会上表示 Imagen 2 采用了 Google DeepMind 开发的 SynthID 技术，在生成的动态图像中应用不可见的加密水印。Google 声称这些水印能够抵抗编辑，包括压缩、滤镜和色调的调整，但检测这些水印需要Google提供的工具，目前尚未向第三方开放。 
+     
+    Vertex AI Agent Builder 
+     
+      
+     
+    
+      Vertex AI Agent Builder 是一个 Agent 创建工具。Google Cloud 的CEO Thomas Kurian 在会上表示，这款 nocode 产品使人们能够方便的构建并部署 chat agent，并以指导人类的方式来指导和改善模型回答的质量和正确性。 
+     
+    
+      Vertex AI Agent Builder 基于 Google 此前发布的 Vertex AI Search and Conversation 产品，并利用了最新的Gemini 大语言模型，同时依赖于 RAG API 和向量搜索这两种广泛使用的技术来减少幻觉现象。 
+     
+    
+      为了提高回答的质量，Google 采用了一种称为“锚定”的过程，即将答案与被认为是可靠来源的内容关联起来。在这种情况下，它依赖于 Google 搜索的结果。Kurian 表示，通过将 Google 搜索的世界知识通过“锚定”服务引入模型中，以及支持针对企业数据源进行锚定，Google正在提高回答的质量和可靠性，满足企业客户的需求。 
+     
+    Arm 架构的 CPU：Axion 
+     
+      
+     
+    
+      Google 发布了其首款定制的基于 Arm 架构的数据中心芯片 Axion。这款处理器采用了 Arm Neoverse V2 CPU 核心，结合 Google 在芯片设计方面的专业技术，为通用任务处理带来了巨大的性能提升。与当前一代的技术相比，Axion 在性能上提高了50%，能效则提升了 60% 之多。Google表示，Axion 已经开始应用于 YouTube 广告平台等现有服务中。 
+     
+    
+      未来，包括 Google Compute Engine、Google Kubernetes Engine、Dataproc、Dataflow、Cloud Batch 等在内的多个 Google Cloud 服务，都将可以使用 Axion 处理器创建实例。此外，包括 Snap 在内的一些客户也对采用 Axion 表现出浓厚的兴趣。 
+     
+    TPU v5p 
+     
+      
+     
+     Cloud TPU v5p 由总共 8,960 个芯片组成，支持 Google 迄今为止最快的互连技术，每个芯片的速度可达 4,800 Gbps。与 v4 TPU 相比，Google承诺这些芯片的速度有显著提升，v5p 在 FLOPS 上的改进达到 2 倍，在高带宽内存上的改进达到 3 倍。 
+     
+     
+      
+     
+    
+      Google表示，这意味着 TPU v5p 可以比 TPU v4 更快地（提速2.8倍）且更便宜地训练大型语言模型，如 GPT3-175B。Google DeepMind 和 Google Research 的首席科学家 Jeff Dean 写道：“在我们早期使用阶段，Google DeepMind 和 Google Research 观察到，使用TPU v5p 芯片进行 LLM 训练工作负载的速度比我们的 TPU v4 代提高了 2 倍。对 ML 框架（JAX, PyTorch, TensorFlow）和编排工具的强大支持使我们能够在 v5p 上更有效地扩展。借助第二代 SparseCores，我们还看到了嵌入密集型工作负载性能的显著提升。TPU 对于支持我们最大规模的研究和工程努力，开展如 Gemini 这样的前沿模型至关重要。” 
+     
+    
+      目前，新的 TPU v5p 还未向普通开发者开放，因此开发者需要联系他们的 Google 账户经理才能加入等待名单。 
+     
+    Google Workspace 引入 AI 能力 
+     
+      
+     
+    
+      Google 在会上宣布了对其 Google Workspace 生产力套件新增两个每月10美元的AI增值服务，通过引入先进的AI功能来提升用户的工作效率。 
+     
+     第一个是 AI 会议和消息服务。它能够为用户记录会议笔记、提供会议摘要，并支持将内容翻译成 69 种语言。Google Workspace的副总裁兼总经理 Aparna Pappu 特别提到，新增了52种语言的翻译支持，包括菲律宾语、韩语等，使得支持的语言总数达到69种。 
+     
+     第二个增值服务是 AI 安全包，这一服务帮助管理员提高 Google Workspace 内容的安全性，包括能够对具有特定敏感特征的文件进行分类和保护。此外，该服务还能帮助保护应保密的信息，并应用数据丢失预防控制，这些控制措施可以根据各个组织的具体要求进行调整。值得一提的是，Google还计划为会议增值服务引入更多增强功能，包括使用生成式AI创建自定义背景、提供专业质量的会议视频和音频效果等，这些新功能将在未来几个月内推出。如果你使用过飞书的会议，应该对这些功能不陌生。 
+     
+     
+     以上是掘金在拉斯维加斯整理的第一天 Keynote 的 8 个 AI 重大更新，第二天是 Developer Keynote，以上介绍的 AI 产品会有更多技术细节曝光，请掘友关注我们的公众号，不要错过后续更新。 
+     
+    
+      点击“阅读原文”可观看直播回放
+
+查看原网页: http://mp.weixin.qq.com/s?__biz=Mzg5NjAzMjI0NQ==&mid=2247507820&idx=1&sn=bdd65a8f260da0a8b6b1c698f67abf56&chksm=c005d3f6f7725ae01345083e765b4a6f1b633c047ac86afe347c8126f0e84b43b94ace7a7d67&mpshare=1&scene=1&srcid=0412xPxQrTeFPmrHi51nIPK9&sharer_shareinfo=a4871b054a775aff23cdfc4ef0fea2e7&sharer_shareinfo_first=a4871b054a775aff23cdfc4ef0fea2e7#rd
+Cubox 链接: https://cubox.pro/my/card?id=7178327415679094340

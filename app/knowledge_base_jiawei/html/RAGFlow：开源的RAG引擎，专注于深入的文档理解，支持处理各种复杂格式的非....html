@@ -1,0 +1,206 @@
+<html id="html-top" lang="zh">
+ <head>
+  <meta charset="UTF-8">
+  <title>RAGFlow：开源的RAG引擎，专注于深入的文档理解，支持处理各种复杂格式的非结构化数据</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="icon" href="https://cubox.pro/my/favicon.svg" type="image/x-icon">
+  <link href="https://cubox.pro/article/css/reader.css" rel="stylesheet">
+ </head>
+ <body ontouchstart>
+  <div class="reader-page">
+   <div>
+    <h1 class="reader-title">RAGFlow：开源的RAG引擎，专注于深入的文档理解，支持处理各种复杂格式的非结构化数据</h1>
+    <div class="reader-metadata">
+     <a href="http://mp.weixin.qq.com/s?__biz=MzkyMTYwNjgwNA==&amp;mid=2247484705&amp;idx=1&amp;sn=e3a3857c5d0c06d6b2fe42257ba63510&amp;chksm=c1804adaf6f7c3cc4d0de56179365840d44fbcc7adaa3f4523be25e1abba85282837b3f5165a&amp;mpshare=1&amp;scene=1&amp;srcid=0412t30IwWsZ61gzBE5J7BNf&amp;sharer_shareinfo=d3c0a1aa57283149ad17a482bf84342d&amp;sharer_shareinfo_first=d3c0a1aa57283149ad17a482bf84342d#rd" target="_blank">mp.weixin.qq.com</a><span class="reader-metadata-author">开源AI 开源AI项目落地</span>
+    </div> 
+    <section> 
+     <section> 
+      <p><strong>项目简介</strong></p> 
+     </section> 
+     <section> 
+      <p>RAGFlow是一个开源的RAG引擎，专注于深入的文档理解。该项目提供了一个简化的RAG工作流，适用于各种规模的企业，通过结合使用大型语言模型（LLM）来提供基于严谨引用的真实问答能力。支持处理各种复杂格式的非结构化数据，包括文本、图片、扫描副本、结构化数据和网页等。</p> 
+      <p>此外，RAGFlow还具备自动化和易于配置的特点，能够与商业系统无缝集成，提高数据处理和分析的效率。</p> 
+     </section> 
+     <section> 
+      <p><strong>扫码加入交流群</strong></p> 
+      <p><span><strong>获得更多技术支持和交流</strong></span></p> 
+      <p><span><strong>（请注明自己的职业）</strong></span></p> 
+     </section> 
+     <section> 
+      <img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_jpg%2Fl2VB7h1M5NaibYV3I3pXXLRmVoJDYyV7nvOLzOfOPx9kPwuF8vNicb5TkkCwLuooKEhTZeXBG2XezWaYPaCdZFnA%2F640%3Fwx_fmt%3Djpeg%26from%3Dappmsg&amp;valid=true" data-cubox-archive-src="https://mmbiz.qpic.cn/mmbiz_jpg/l2VB7h1M5NaibYV3I3pXXLRmVoJDYyV7nvOLzOfOPx9kPwuF8vNicb5TkkCwLuooKEhTZeXBG2XezWaYPaCdZFnA/640?wx_fmt=jpeg&amp;from=appmsg" data-index="2" data-original- data-w="900" data-type="jpeg" data-src="https://mmbiz.qpic.cn/mmbiz_jpg/l2VB7h1M5NaibYV3I3pXXLRmVoJDYyV7nvOLzOfOPx9kPwuF8vNicb5TkkCwLuooKEhTZeXBG2XezWaYPaCdZFnA/640?wx_fmt=jpeg&amp;from=appmsg" data-s="300,640" data-ratio="1" data-imgfile loading="lazy"> 
+     </section> 
+     <section> 
+      <p><strong>主要特点</strong></p> 
+     </section> 
+     <section> 
+      <p>🍭 “输入质量决定输出质量”</p> 
+      <p><strong>·</strong>基于深度文档理解的非结构化数据知识提取，处理复杂格式数据。</p> 
+      <p><strong>·</strong>在包含无限符号的数据“干草堆”中寻找“针”。</p> 
+      <p>🍱 基于模板的数据分块</p> 
+      <p><strong>·</strong>智能化且可解释性强。</p> 
+      <p><strong>·</strong>提供众多模板选项。</p> 
+      <p>🌱 提供可靠引用，减少错觉</p> 
+      <p><strong>·</strong>可视化文本分块，支持人工干预。</p> 
+      <p><strong>·</strong>快速查看关键参考资料和可追踪引用以支持有根据的回答。</p> 
+      <p>🍔 与异构数据源兼容</p> 
+      <p><strong>·</strong>支持Word、幻灯片、Excel、txt、图片、扫描副本、结构化数据、网页等。</p> 
+      <p>🛀 自动化且轻松的RAG工作流</p> 
+      <p><strong>·</strong>为个人和大型企业量身定制的RAG流程管理。</p> 
+      <p><strong>·</strong>可配置的大型语言模型和嵌入模型。</p> 
+      <p><strong>·</strong>多重召回配合融合重排。</p> 
+      <p><strong>·</strong>直观的API，便于与商业系统无缝集成。</p> 
+     </section> 
+     <section> 
+      <p><strong>系统架构</strong></p> 
+     </section> 
+     <section> 
+      <img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2Fl2VB7h1M5NaibYV3I3pXXLRmVoJDYyV7nkCpq16Ciadpj7ficciaKeUibpDxMT9WMCa4eLF2ias6ibWwCc9vCHlNuSvPg%2F640%3Fwx_fmt%3Dpng%26from%3Dappmsg&amp;valid=true" data-cubox-archive-src="https://mmbiz.qpic.cn/mmbiz_png/l2VB7h1M5NaibYV3I3pXXLRmVoJDYyV7nkCpq16Ciadpj7ficciaKeUibpDxMT9WMCa4eLF2ias6ibWwCc9vCHlNuSvPg/640?wx_fmt=png&amp;from=appmsg" data-index="3" data-original- data-w="1080" data-type="png" data-src="https://mmbiz.qpic.cn/mmbiz_png/l2VB7h1M5NaibYV3I3pXXLRmVoJDYyV7nkCpq16Ciadpj7ficciaKeUibpDxMT9WMCa4eLF2ias6ibWwCc9vCHlNuSvPg/640?wx_fmt=png&amp;from=appmsg" data-s="300,640" data-ratio="0.562962962962963" data-imgfile loading="lazy"> 
+     </section> 
+     <section> 
+      <p><strong>使用</strong></p> 
+     </section> 
+     <section> 
+      <p dir="auto" tabindex="-1">📝<strong>先决条件</strong></p> 
+      <p><strong>·</strong>CPU &gt;= 2 核</p> 
+      <p><strong>·</strong>内存 &gt;= 8 GB</p> 
+      <p><strong>·</strong>Docker &gt;= 24.0.0 &amp; Docker Compose &gt;= v2.26.1</p> 
+      <p><strong>🚀 启动服务器</strong></p> 
+      <p>1.要确保 vm.max_map_count 的值至少为 262144，你可以按照以下步骤操作：</p> 
+      <p><strong>·</strong>检查当前值：在终端运行 sysctl vm.max_map_count 来查看当前设置。</p> 
+     </section> 
+     <section> 
+      <ul> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>$ sysctl vm.max_map_count</span></code></pre> 
+     </section> 
+     <p><strong>·</strong>重置值：如果值低于 262144，运行 sudo sysctl -w vm.max_map_count=262144 来临时更改它。</p> 
+     <section> 
+      <ul> 
+       <li></li> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span># In <span>this</span> <span>case</span>, we <span>set</span> it to <span>262144</span>:</span></code><code><span>$ sudo sysctl -w vm.max_map_count=<span>262144</span></span></code></pre> 
+     </section> 
+     <p><strong>·</strong>永久设置：为了确保重启后设置不变，需要将 vm.max_map_count=262144 添加到 /etc/sysctl.conf 文件中。</p> 
+     <section> 
+      <ul> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>vm.max_map_count=<span>262144</span></span></code></pre> 
+     </section> 
+     <p><strong><br></strong>2.克隆所需的存储库</p> 
+     <section> 
+      <ul> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>$ git clone https:<span>//github.com/infiniflow/ragflow.git</span></span></code></pre> 
+     </section> 
+     <section> 
+      <p>3.构建预构建的Docker镜像，并启动服务器</p> 
+     </section> 
+     <section> 
+      <ul> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>$ cd ragflow/docker</span></code><code><span>$ chmod +x ./entrypoint.sh</span></code><code><span>$ docker compose up -d</span></code></pre> 
+     </section> 
+     <section> 
+      <p>核心映像大小约为 9 GB，可能需要一段时间才能加载。<br></p> 
+      <p>4.动后，检查服务器状态以确认系统已成功启动。</p> 
+      <p>以下输出确认系统已成功启动</p> 
+     </section> 
+     <section> 
+      <ul> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>  ____         ______ __</span></code><code><span>  / __ \ ____ _ ____ _ / ____<span>// /____ _   __</span></span></code><code><span> / /_/ <span>// __ `// __ `// /_  / // __ \| | /| / /</span></span></code><code><span> / _, _<span>// /_/ // /_/ // __/ / // /_/ /| |/ |/ /</span></span></code><code><span>/_/ |_| \__,_/ \__, <span>//_/  /_/ \____/ |__/|__/</span></span></code><code><span>       /____/</span></code><code><span><br></span></code><code><span> * <span>Running on all <span>addresses</span> <span>(<span>0.0</span><span>.0</span><span>.0</span>)</span></span></span></code><code><span> * Running on http:<span>//127.0.0.1:9380</span></span></code><code><span> * Running on http:<span>//x.x.x.x:9380</span></span></code><code><span> INFO:werkzeug:Press CTRL+C to quit</span></code></pre> 
+     </section> 
+     <section> 
+      <p>5.在你的网络浏览器中，输入你的服务器 IP 地址并登录到 RAGFlow。</p> 
+      <p>在给定场景中，你只需输入 http://IP_OF_YOUR_MACHINE（无需端口号）即可，因为使用默认配置时可以省略默认的 HTTP 服务端口 80。</p> 
+      <p>6.在 service_conf.yaml 中，选择所需的 LLM 工厂在 user_default_llm 中，并用相应的 API 密钥更新 API_KEY 字段。</p> 
+     </section> 
+     <section> 
+      <p><strong>配置</strong></p> 
+     </section> 
+     <section> 
+      <p>1.在处理系统配置时，您需要管理以下文件：</p> 
+      <p><strong>·</strong>.env：存储系统的基本设置，如 SVR_HTTP_PORT、MYSQL_PASSWORD 和 MINIO_PASSWORD。</p> 
+      <p><strong>·</strong>service_conf.yaml：配置后端服务。</p> 
+      <p><strong>·</strong>docker-compose.yml：系统依赖此文件启动。</p> 
+      <p>2.必须确保 .env 文件中的更改与 service_conf.yaml 文件中的设置相符。</p> 
+      <p>./docker/README 文件详细描述了环境设置和服务配置，您需要确保所有在 ./docker/README 文件中列出的环境设置与 service_conf.yaml 文件中的相应配置保持一致。</p> 
+      <p>3.若需更新默认的 HTTP 服务端口（80），请在 docker-compose.yml 中将 80:80 更改为:80。</p> 
+      <p>所有系统配置的更新都需要重启系统才能生效。</p> 
+     </section> 
+     <section> 
+      <ul> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>$ docker-compose up -d</span></code></pre> 
+     </section> 
+     <section> 
+      <p dir="auto" tabindex="-1"><strong>从源代码构建</strong></p> 
+     </section> 
+     <p>从源代码构建 Docker 镜像：</p> 
+     <section> 
+      <ul> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+       <li></li> 
+      </ul> 
+      <pre data-lang="c"><code><span>$ git clone https:<span>//github.com/infiniflow/ragflow.git</span></span></code><code><span>$ cd ragflow/</span></code><code><span>$ docker build -t infiniflow/ragflow:v1<span>.0</span> .</span></code><code><span>$ cd ragflow/docker</span></code><code><span>$ chmod +x ./entrypoint.sh</span></code><code><span>$ docker compose up -d</span></code></pre> 
+     </section> 
+     <p>关注「<span>开源AI项目落地</span>」公众号</p> 
+     <section> 
+      <template data-cubox-archive-shadowroot=""> 
+       <div> 
+        <div aria-labelledby="js_a11y_wx_profile_nickname js_a11y_comma js_a11y_wx_profile_desc js_a11y_comma js_a11y_wx_profile_tips js_a11y_comma js_a11y_wx_profile_logo" tabindex="0" role="link"> 
+         <div role="option"> 
+          <div aria-hidden="true"> 
+           <div> 
+            <div> 
+             <img src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2Fl2VB7h1M5NZdS3ib2LIic81lLV5Ra8DVxjXibc1cRmCQs6fZJBfbXKCHsNbRTYWNTEHynK7AV5W6ENQicjibib1Vw1JA%2F300%3Fwx_fmt%3Dpng%26wxfrom%3D19&amp;valid=true" data-cubox-archive-src="http://mmbiz.qpic.cn/mmbiz_png/l2VB7h1M5NZdS3ib2LIic81lLV5Ra8DVxjXibc1cRmCQs6fZJBfbXKCHsNbRTYWNTEHynK7AV5W6ENQicjibib1Vw1JA/300?wx_fmt=png&amp;wxfrom=19" data-cubox-archive-currentsrc="https://mmbiz.qpic.cn/mmbiz_png/l2VB7h1M5NZdS3ib2LIic81lLV5Ra8DVxjXibc1cRmCQs6fZJBfbXKCHsNbRTYWNTEHynK7AV5W6ENQicjibib1Vw1JA/300?wx_fmt=png&amp;wxfrom=19" loading="lazy"> 
+            </div> 
+            <div> 
+             <div> <strong>开源AI项目落地</strong> 
+              <div>
+                分享有价值的开源项目，并且致力于Ai项目的落地。 
+              </div> 
+              <div> <span>81篇原创内容</span> 
+              </div> 
+             </div> <i></i> 
+            </div> 
+           </div> 
+          </div> 
+          <div aria-hidden="true">
+            公众号 
+          </div> 
+         </div> 
+        </div> <span aria-hidden="true">，</span> 
+       </div> 
+      </template> 
+     </section> 
+    </section> 
+    <p class="reader-footer"><a class="reader-footer-source" href="https://cubox.pro/my/card?id=7178435483590986164" target="_blank"><span class="reader-footer-source-label">跳转到 Cubox 查看</span></a></p>
+   </div>
+  </div>
+  <script type="text/javascript" src="https://cubox.pro/article/js/reader.js"></script>
+ </body>
+</html>

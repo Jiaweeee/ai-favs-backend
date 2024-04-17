@@ -1,0 +1,19 @@
+vercel的ai sdk+ai chatbot都做的很方便 - 即刻App
+   
+    m.okjike.com
+    
+    
+     
+      vercel的ai sdk+ai chatbot都做的很方便上手，我将ai-chatbot项目github.com 实践套壳gpt（chat.aicube.fun），缝合langchain官方的next.js+langchain.js的示例模板github.com，很轻松就实现了搜索、浏览、Dall-E生图等gpts的功能.  
+      一键部署到vercel，还用tauri打包成客户端，实践下来确实可以成为AI Navtive初创企业的首选框架🚲  
+      当然新的rsc版本，多了AI State和UI State这样的设定，开始让框架有点繁琐了，我个人是不太感冒，庆幸自己是在之前fork了这个项目，保留了简洁的chatbot框架，方便自己拓展改造。欢迎对rsc有研究的朋友指正。  
+      🧡感谢文章作者 @Scarlett-事业脑版 的精彩创作，期待更多好文！  
+     
+     
+      
+      
+      Vercel：用生成式UI重塑前端开发 
+      点击阅读原文
+
+查看原网页: https://m.okjike.com/originalPosts/660ca9033b9c66cae478c8ac?s=eyJ1IjoiNTY3YTUwZDQ2ZWY4OWMxMjAwOGE3NTc1In0%3D&utm_source=wechat_session
+Cubox 链接: https://cubox.pro/my/card?id=7175011096707728470

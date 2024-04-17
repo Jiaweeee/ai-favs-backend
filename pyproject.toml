@@ -15,7 +15,9 @@ langserve = {extras = ["server"], version = ">=0.0.30"}
 pydantic = "<2"
 python-dotenv = "^1.0.1"
 openai = "^1.17.1"
-pirate-speak = {path = "packages/pirate-speak", develop = true}
+langchain-openai = "^0.1.3"
+faiss-cpu = "^1.8.0"
+langchainhub = "^0.1.15"
 
 
 [tool.poetry.group.dev.dependencies]

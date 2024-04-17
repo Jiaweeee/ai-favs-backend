@@ -1,0 +1,139 @@
+Extracting Song Lyrics using the OpenAI Whisper Model
+   
+    medium.comEvans Ehiorobo
+    
+    
+     
+      
+       
+        
+         
+           
+            
+             
+            
+          
+          
+           
+             
+            
+             
+             Evans Ehiorobo 
+             
+            Follow 
+            
+            
+           
+            
+            
+           
+           5 min read 
+           May 19, 2023  
+           
+           
+           
+          
+         
+         
+          
+          
+          
+          
+         
+        
+       
+       
+         
+          
+         
+        
+       
+         Photo by saeed karimi on Unsplash 
+        
+       
+      The OpenAI Whisper model is an Automatic Speech Recognition (ASR) system trained with more than 680,000 hours of audio data compiled from sources across the Internet. As a result of its extensive training, it is able to transcribe audio recordings and translate from about 56 different languages to English with a word error rate less than 50%. It is also able to understand accents and works well with background noise, which makes it great for the present use case. 
+      In this article, I will describe how to build a tool to extract song lyrics from audio files. With Whisper, there are two ways to do this: 
+       
+       Using the Whisper API which requires getting an OpenAI API key 
+       Downloading and running the Whisper models 
+       
+      
+      
+      Prerequisites 
+       
+       If using the Whisper API, you will need to create an account on OpenAI and then create an API key here. The Whisper API is currently free to use. 
+       If using the model, you will need to have ffmpeg installed on your device. It is available in most package managers and you can find installation instructions in the Whisper setup section. 
+       You would also need to have Python installed as this article only describes using the Python libraries. 
+       
+      
+      
+      Using the API 
+      First, you’ll need to set up a virtual environment and then install the openai library: 
+      python -m venv .envsource .env/bin/activatepip install openai 
+      After that, depending on how your project is set up, you might want to create a config file (this is what we’ll be using here) or use environmental variables to store your API key. 
+       
+       If using a config file, be sure not to commit it to your repository! 
+       
+      API_KEY = "{YOUR OPENAI API KEY}" 
+      The rest of the code in this section assumes there’s a config file named config.py. 
+      First, create a function that takes in the file path to the song or audio recording: 
+      def transcribe_audio(audio_file_path: str) -&gt; str:    pass 
+      Next, open the file in binary format and pass it to the Audio.transcribe method. The other arguments are the model name (“whisper-1” for now) and your API key: 
+      import config, openaidef transcribe_audio(audio_file_path: str) -&gt; str:    with open(audio_file_path, "rb") as audio_file:        transcript = openai.Audio.transcribe(            "whisper-1",            audio_file,            api_key=config.API_KEY        ) 
+      If you print the transcript variable, you’ll get something similar to: 
+      {  "text": "..."} 
+      You can return just the text instead of the entire dictionary as the function response: 
+      import config, openaidef transcribe_audio(audio_file_path: str) -&gt; str:    ...    return transcript["text"] 
+      and call the function with: 
+      if __name__ == "__main__":    file_path = "{file_path}"    transcript = transcribe_audio(file_path)    print(transcript) 
+      Make sure to change “{file_path}” to the file path of the audio recording on your device. 
+      Putting it all together, you should now have: 
+      import config, openaidef transcribe_audio(audio_file_path: str) -&gt; str:    with open(audio_file_path, "rb") as audio_file:        transcript = openai.Audio.transcribe(            "whisper-1",            audio_file,            api_key=config.API_KEY        )        return transcript["text"]if __name__ == "__main__":    file_path = "{file_path}"    transcript = transcribe_audio(file_path)    print(transcript) 
+      After running the code above on a recording of Adele’s Set Fire to the Rain, I got this: 
+      I let it fall, my heart, and as it fell you rose to claim it I ...&lt;truncated&gt; 
+      
+      
+      Using the model 
+      Again, you’ll need to set up a virtual environment and then install the whisper library: 
+      python -m venv .envsource .env/bin/activatepip install openai-whisper 
+      Next, create a function that takes in the file path to the song or audio recording: 
+      def transcribe_audio(audio_file_path: str):    pass 
+      You will need to download the Whisper model you plan to use ahead of time. In a proper project, you would want to do this long before anyone calls your transcribe_audio function, like during the application start-up. 
+      import whisper...model = whisper.load_model("medium") 
+      The model options include “tiny”, “base”, “small”, “medium” and “large”, and the trade-offs are described here. 
+      By default, the model is stored in a cache folder when downloaded and can be re-used without having to load it again, but if you want to store it in a different folder, you can add a download_root path: 
+      model = whisper.load_model(    "medium",    download_root="{YOUR FILE PATH FOR WHISPER MODELS}") 
+      You can now use the model to transcribe audio files: 
+      import whisperdef transcribe_audio(audio_file_path: str) -&gt; dict:    model = whisper.load_model(        "medium",        download_root="{YOUR FILE PATH FOR WHISPER MODELS}"    )    return model.transcribe(audio_file_path) 
+      The response here is a dictionary with three keys: 
+       
+       text: the entire text transcription; 
+       segments: the model results for an audio segment, including the text contained, position within the audio and other data; 
+       language: the language detected 
+       
+      When calling the function, you can either retrieve the entire text transcription, or get the text in different segments: 
+      if __name__ == "__main__":    file_path = "{file_path}"    transcript = transcribe_audio(file_path)        # print the entire transcript text    print(transcript["text"])    # print the transcript text line by line    segments = transcript["segments"]    for segment in segments:        print(segment["text"]) 
+      Putting it all together, you should have: 
+      import whisperdef transcribe_audio(audio_file_path: str) -&gt; dict:    model = whisper.load_model(        "medium",        download_root="{YOUR FILE PATH FOR WHISPER MODELS}"    )    return model.transcribe(audio_file_path)if __name__ == "__main__":    file_path = "{file_path}"    transcript = transcribe_audio(file_path)        # print the entire transcript text    print(transcript["text"])    # print the transcript text line by line    segments = transcript["segments"]    for segment in segments:        print(segment["text"]) 
+      The different models have, as would be expected, different levels of accuracy based on their size, with the larger models doing better. 
+      
+      
+      Comparing results 
+      To find out how accurate this tool is, I compared the results from the API and the medium Whisper model with the lyrics found on Google Search (provided by Lyricfind.com) for Adele’s Set Fire to the Rain. 
+      I used the bigrams of the words on each line / segment to compare. A bigram is a sequence containing each pair of adjacent elements in a list. So, for example, the bigram of the words in “I let it fall my heart” is [I let, let it, it fall, fall my, my heart]. 
+      To compare how similar the lyrics from this tool are with the (supposedly) human-generated lyrics from Google, I checked: 
+      1 - (N / T) 
+      where N represents the number of bigrams in the human-generated lyrics that are not in the AI-generated ones per line and T represents the total number of bigrams in the human-generated line. 
+      For example, if the word “three” is missing from “one, two, one, three” with the resulting bigrams: [one two, two one], as opposed to the original: [one two, two one, one three], the value calculated would be: 
+      1 - (1 / 3) = 0.67 
+      or 67% similarity. (This works better with longer sentences.) 
+      After getting this similarity values for all lines of the lyrics, I calculated the average similarity value. Here are the results: 
+      API similarity level: 0.8946789321789325medium model similarity level: 0.8121108058608061 
+      Both methods give results with more than 80% similarity to the lyrics found on Google. I’ll let you judge how good a performance that is. 
+      Some methods to increase the accuracy of the methods by pre-processing the audio file before passing it in to the API or model are described here. 
+      
+      
+      The code for this article is available in this repo. I would love to read your comments and suggestions. 
+
+查看原网页: https://medium.com/@ehioroboevans/extracting-song-lyrics-using-the-openai-whisper-model-21eeb19aa722
+Cubox 链接: https://cubox.pro/my/card?id=7174312545036012991

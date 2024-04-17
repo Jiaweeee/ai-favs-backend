@@ -1,0 +1,156 @@
+<html id="html-top" lang="zh">
+ <head>
+  <meta charset="UTF-8">
+  <title>Extracting Song Lyrics using the OpenAI Whisper Model</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="icon" href="https://cubox.pro/my/favicon.svg" type="image/x-icon">
+  <link href="https://cubox.pro/article/css/reader.css" rel="stylesheet">
+ </head>
+ <body ontouchstart>
+  <div class="reader-page">
+   <div>
+    <h1 class="reader-title">Extracting Song Lyrics using the OpenAI Whisper Model</h1>
+    <div class="reader-metadata">
+     <a href="https://medium.com/@ehioroboevans/extracting-song-lyrics-using-the-openai-whisper-model-21eeb19aa722" target="_blank">medium.com</a><span class="reader-metadata-author">Evans Ehiorobo</span>
+    </div> 
+    <article> 
+     <div> 
+      <div> 
+       <div> 
+        <div> 
+         <div> 
+          <div> <a href="https://medium.com/@ehioroboevans?source=post_page-----21eeb19aa722--------------------------------" rel="noopener follow" target="_blank"> 
+            <div aria-labelledby="1" aria-describedby="1" aria-hidden="false"> 
+             <p><img data-archive-loading="lazy" data-test src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmiro.medium.com%2Fv2%2Fresize%3Afill%3A88%3A88%2F0%2AHBv7TgDvr0Qoqssy.&amp;valid=true" loading="lazy"></p> 
+            </div></a> 
+          </div> 
+          <div> 
+           <div> 
+            <p><span> </span></p> 
+            <div> 
+             <div> 
+              <p><a href="https://medium.com/@ehioroboevans?source=post_page-----21eeb19aa722--------------------------------" rel="noopener follow" data-test target="_blank">Evans Ehiorobo</a></p> 
+             </div> 
+             <p><span><a href="https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F295cbb45908f&amp;operation=register&amp;redirect=https%3A%2F%2Fmedium.com%2F%40ehioroboevans%2Fextracting-song-lyrics-using-the-openai-whisper-model-21eeb19aa722&amp;user=Evans+Ehiorobo&amp;userId=295cbb45908f&amp;source=post_page-295cbb45908f----21eeb19aa722---------------------post_header-----------" rel="noopener follow" target="_blank">Follow</a></span></p> 
+            </div> 
+            <p></p> 
+           </div> 
+           <p><span> </span></p> 
+           <p><span> </span></p> 
+           <div> 
+            <p><span data-test>5 min read</span></p> 
+            <p><span data-test>May 19, 2023</span> </p> 
+           </div> 
+           <p></p> 
+           <p></p> 
+          </div> 
+         </div> 
+         <div> 
+          <div> 
+          </div> 
+          <div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+       <figure> 
+        <div tabindex="0" role="button"> <picture> 
+          <img src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmiro.medium.com%2Fv2%2Fresize%3Afit%3A1400%2F1%2ALGjzOMYOICJ3N2uMZ2uXbw.jpeg&amp;valid=true" role="presentation" loading="lazy"> 
+         </picture> 
+        </div> 
+        <figcaption data-selectable-paragraph="">
+          Photo by <a rel="noopener ugc nofollow" href="https://unsplash.com/@saeedkarimi?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank">saeed karimi</a> on <a rel="noopener ugc nofollow" href="https://unsplash.com/photos/JrrWC7Qcmhs?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" target="_blank">Unsplash</a> 
+        </figcaption> 
+       </figure> 
+       <p data-selectable-paragraph="">The OpenAI <a rel="noopener ugc nofollow" href="https://platform.openai.com/docs/guides/speech-to-text" target="_blank">Whisper</a> model is an Automatic Speech Recognition (ASR) system trained with more than 680,000 hours of audio data compiled from sources across the Internet. As a result of its extensive training, it is able to transcribe audio recordings and translate from about 56 different languages to English with a <a rel="noopener ugc nofollow" href="https://en.wikipedia.org/wiki/Word_error_rate" target="_blank">word error rate</a> less than 50%. It is also able to understand accents and works well with background noise, which makes it great for the present use case.</p> 
+       <p data-selectable-paragraph="">In this article, I will describe how to build a tool to extract song lyrics from audio files. With Whisper, there are two ways to do this:</p> 
+       <ul> 
+        <li data-selectable-paragraph="">Using the <a rel="noopener ugc nofollow" href="https://platform.openai.com/docs/guides/speech-to-text/quickstart" target="_blank">Whisper API</a> which requires getting an OpenAI API key</li> 
+        <li data-selectable-paragraph="">Downloading and running the <a rel="noopener ugc nofollow" href="https://github.com/openai/whisper" target="_blank">Whisper models</a></li> 
+       </ul> 
+      </div> 
+      <div> 
+       <h2 data-selectable-paragraph="">Prerequisites</h2> 
+       <ul> 
+        <li data-selectable-paragraph="">If using the Whisper API, you will need to create an account on OpenAI and then create an API key <a rel="noopener ugc nofollow" href="https://platform.openai.com/account/api-keys" target="_blank">here</a>. The Whisper API is currently free to use.</li> 
+        <li data-selectable-paragraph="">If using the model, you will need to have <a rel="noopener ugc nofollow" href="https://ffmpeg.org/" target="_blank">ffmpeg</a> installed on your device. It is available in most package managers and you can find installation instructions in the <a rel="noopener ugc nofollow" href="https://github.com/openai/whisper#setup" target="_blank">Whisper setup section</a>.</li> 
+        <li data-selectable-paragraph="">You would also need to have Python installed as this article only describes using the Python libraries.</li> 
+       </ul> 
+      </div> 
+      <div> 
+       <h2 data-selectable-paragraph="">Using the API</h2> 
+       <p data-selectable-paragraph="">First, you’ll need to set up a virtual environment and then install the <strong><em>openai</em></strong> library:</p> 
+       <pre><span data-selectable-paragraph="">python -m venv .<span>env</span><br><span>source</span> .<span>env</span>/bin/activate<br>pip install openai</span></pre> 
+       <p data-selectable-paragraph="">After that, depending on how your project is set up, you might want to create a config file (this is what we’ll be using here) or use environmental variables to store your API key.</p> 
+       <blockquote> 
+        <p data-selectable-paragraph="">If using a config file, be sure not to commit it to your repository!</p> 
+       </blockquote> 
+       <pre><span data-selectable-paragraph="">API_KEY = <span>"{YOUR OPENAI API KEY}"</span></span></pre> 
+       <p data-selectable-paragraph="">The rest of the code in this section assumes there’s a config file named <strong><em>config.py.</em></strong></p> 
+       <p data-selectable-paragraph="">First, create a function that takes in the file path to the song or audio recording:</p> 
+       <pre><span data-selectable-paragraph=""><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>) -&gt; <span>str</span>:<br>    <span>pass</span></span></pre> 
+       <p data-selectable-paragraph="">Next, open the file in binary format and pass it to the <strong><em>Audio.transcribe</em></strong> method. The other arguments are the model name (“whisper-1” for now) and your API key:</p> 
+       <pre><span data-selectable-paragraph=""><span>import</span> config, openai<p><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>) -&gt; <span>str</span>:<br>    <span>with</span> <span>open</span>(audio_file_path, <span>"rb"</span>) <span>as</span> audio_file:<br>        transcript = openai.Audio.transcribe(<br>            <span>"whisper-1"</span>,<br>            audio_file,<br>            api_key=config.API_KEY<br>        )</p></span></pre> 
+       <p data-selectable-paragraph="">If you print the <strong><em>transcript</em></strong> variable, you’ll get something similar to:</p> 
+       <pre><span data-selectable-paragraph="">{<br>  <span>"text"</span>: <span>"..."</span><br>}</span></pre> 
+       <p data-selectable-paragraph="">You can return just the text instead of the entire dictionary as the function response:</p> 
+       <pre><span data-selectable-paragraph=""><span>import</span> config, openai<p><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>) -&gt; <span>str</span>:<br>    ...<br>    <span>return</span> transcript[<span>"text"</span>]</p></span></pre> 
+       <p data-selectable-paragraph="">and call the function with:</p> 
+       <pre><span data-selectable-paragraph=""><br><span>if</span> __name__ == <span>"__main__"</span>:<br>    file_path = <span>"{file_path}"</span><br>    transcript = transcribe_audio(file_path)<br>    <span>print</span>(transcript)</span></pre> 
+       <p data-selectable-paragraph="">Make sure to change <strong><em>“{file_path}”</em></strong> to the file path of the audio recording on your device.</p> 
+       <p data-selectable-paragraph="">Putting it all together, you should now have:</p> 
+       <pre><span data-selectable-paragraph=""><span>import</span> config, openai<p><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>) -&gt; <span>str</span>:<br>    <span>with</span> <span>open</span>(audio_file_path, <span>"rb"</span>) <span>as</span> audio_file:<br>        transcript = openai.Audio.transcribe(<br>            <span>"whisper-1"</span>,<br>            audio_file,<br>            api_key=config.API_KEY<br>        )<br>        <span>return</span> transcript[<span>"text"</span>]</p><p><span>if</span> __name__ == <span>"__main__"</span>:<br>    file_path = <span>"{file_path}"</span><br>    transcript = transcribe_audio(file_path)<br>    <span>print</span>(transcript)</p></span></pre> 
+       <p data-selectable-paragraph="">After running the code above on a recording of <a rel="noopener ugc nofollow" href="https://en.wikipedia.org/wiki/Set_Fire_to_the_Rain" target="_blank">Adele’s Set Fire to the Rain</a>, I got this:</p> 
+       <pre><span data-selectable-paragraph="">I <span>let</span> it fall, my heart, and as it fell you rose to claim it I ...&lt;truncated&gt;</span></pre> 
+      </div> 
+      <div> 
+       <h2 data-selectable-paragraph="">Using the model</h2> 
+       <p data-selectable-paragraph="">Again, you’ll need to set up a virtual environment and then install the <strong><em>whisper</em></strong> library:</p> 
+       <pre><span data-selectable-paragraph="">python -m venv .<span>env</span><br><span>source</span> .<span>env</span>/bin/activate<br>pip install openai-whisper</span></pre> 
+       <p data-selectable-paragraph="">Next, create a function that takes in the file path to the song or audio recording:</p> 
+       <pre><span data-selectable-paragraph=""><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>):<br>    <span>pass</span></span></pre> 
+       <p data-selectable-paragraph="">You will need to download the Whisper model you plan to use ahead of time. In a proper project, you would want to do this long before anyone calls your <strong><em>transcribe_audio</em></strong> function, like during the application start-up.</p> 
+       <pre><span data-selectable-paragraph=""><span>import</span> whisper<p>...</p><p>model = whisper.load_model(<span>"medium"</span>)</p></span></pre> 
+       <p data-selectable-paragraph="">The model options include “tiny”, “base”, “small”, “medium” and “large”, and the trade-offs are described <a rel="noopener ugc nofollow" href="https://github.com/openai/whisper#available-models-and-languages" target="_blank">here</a>.</p> 
+       <p data-selectable-paragraph="">By default, the model is stored in a cache folder when downloaded and can be re-used without having to load it again, but if you want to store it in a different folder, you can add a <strong><em>download_root</em></strong> path:</p> 
+       <pre><span data-selectable-paragraph="">model = whisper.load_model(<br>    <span>"medium"</span>,<br>    download_root=<span>"{YOUR FILE PATH FOR WHISPER MODELS}"</span><br>)</span></pre> 
+       <p data-selectable-paragraph="">You can now use the model to transcribe audio files:</p> 
+       <pre><span data-selectable-paragraph=""><span>import</span> whisper<p><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>) -&gt; <span>dict</span>:<br>    model = whisper.load_model(<br>        <span>"medium"</span>,<br>        download_root=<span>"{YOUR FILE PATH FOR WHISPER MODELS}"</span><br>    )<br>    <span>return</span> model.transcribe(audio_file_path)</p></span></pre> 
+       <p data-selectable-paragraph="">The response here is a dictionary with three keys:</p> 
+       <ul> 
+        <li data-selectable-paragraph="">text: the entire text transcription;</li> 
+        <li data-selectable-paragraph="">segments: the model results for an audio segment, including the text contained, position within the audio and other data;</li> 
+        <li data-selectable-paragraph="">language: the language detected</li> 
+       </ul> 
+       <p data-selectable-paragraph="">When calling the function, you can either retrieve the entire text transcription, or get the text in different segments:</p> 
+       <pre><span data-selectable-paragraph=""><span>if</span> __name__ == <span>"__main__"</span>:<br>    file_path = <span>"{file_path}"</span><br>    transcript = transcribe_audio(file_path)<p>        <span># print the entire transcript text</span><br>    <span>print</span>(transcript[<span>"text"</span>])</p><p>    <span># print the transcript text line by line</span><br>    segments = transcript[<span>"segments"</span>]<br>    <span>for</span> segment <span>in</span> segments:<br>        <span>print</span>(segment[<span>"text"</span>])</p></span></pre> 
+       <p data-selectable-paragraph="">Putting it all together, you should have:</p> 
+       <pre><span data-selectable-paragraph=""><span>import</span> whisper<p><span>def</span> <span>transcribe_audio</span>(<span>audio_file_path: <span>str</span></span>) -&gt; <span>dict</span>:<br>    model = whisper.load_model(<br>        <span>"medium"</span>,<br>        download_root=<span>"{YOUR FILE PATH FOR WHISPER MODELS}"</span><br>    )<br>    <span>return</span> model.transcribe(audio_file_path)</p><p><span>if</span> __name__ == <span>"__main__"</span>:<br>    file_path = <span>"{file_path}"</span><br>    transcript = transcribe_audio(file_path)</p><p>        <span># print the entire transcript text</span><br>    <span>print</span>(transcript[<span>"text"</span>])</p><p>    <span># print the transcript text line by line</span><br>    segments = transcript[<span>"segments"</span>]<br>    <span>for</span> segment <span>in</span> segments:<br>        <span>print</span>(segment[<span>"text"</span>])</p></span></pre> 
+       <p data-selectable-paragraph="">The different models have, as would be expected, different levels of accuracy based on their size, with the larger models doing better.</p> 
+      </div> 
+      <div> 
+       <h2 data-selectable-paragraph="">Comparing results</h2> 
+       <p data-selectable-paragraph="">To find out how accurate this tool is, I compared the results from the API and the <strong><em>medium</em></strong> Whisper model with the lyrics found on Google Search (provided by <a rel="noopener ugc nofollow" href="https://www.lyricfind.com/" target="_blank">Lyricfind.com</a>) for Adele’s Set Fire to the Rain.</p> 
+       <p data-selectable-paragraph="">I used the bigrams of the words on each line / segment to compare. A <a rel="noopener ugc nofollow" href="https://en.wikipedia.org/wiki/Bigram" target="_blank">bigram</a> is a sequence containing each pair of adjacent elements in a list. So, for example, the bigram of the words in <strong><em>“I let it fall my heart”</em></strong> is <strong><em>[I let, let it, it fall, fall my, my heart]</em></strong>.</p> 
+       <p data-selectable-paragraph="">To compare how similar the lyrics from this tool are with the (supposedly) human-generated lyrics from Google, I checked:</p> 
+       <pre><span data-selectable-paragraph="">1 - (N / T)</span></pre> 
+       <p data-selectable-paragraph="">where <strong><em>N</em></strong> represents the number of bigrams in the human-generated lyrics that are not in the AI-generated ones per line and <strong><em>T</em></strong> represents the total number of bigrams in the human-generated line.</p> 
+       <p data-selectable-paragraph="">For example, if the word “three” is missing from <strong><em>“one, two, one, three”</em></strong> with the resulting bigrams: <strong><em>[one two, two one]</em></strong>, as opposed to the original: <strong><em>[one two, two one, one three]</em></strong>,<strong><em> </em></strong>the value calculated would be:</p> 
+       <pre><span data-selectable-paragraph="">1 - (1 / 3) = 0.67</span></pre> 
+       <p data-selectable-paragraph="">or 67% similarity. (This works better with longer sentences.)</p> 
+       <p data-selectable-paragraph="">After getting this similarity values for all lines of the lyrics, I calculated the average similarity value. Here are the results:</p> 
+       <pre><span data-selectable-paragraph="">API similarity level: 0.8946789321789325<br>medium model similarity level: 0.8121108058608061</span></pre> 
+       <p data-selectable-paragraph="">Both methods give results with more than 80% similarity to the lyrics found on Google. I’ll let you judge how good a performance that is.</p> 
+       <p data-selectable-paragraph="">Some methods to increase the accuracy of the methods by pre-processing the audio file before passing it in to the API or model are described <a rel="noopener ugc nofollow" href="https://github.com/openai/whisper/discussions/679" target="_blank">here</a>.</p> 
+      </div> 
+      <div> 
+       <p data-selectable-paragraph="">The code for this article is available in <a rel="noopener ugc nofollow" href="https://github.com/eshiofune/whisper-lyrics" target="_blank">this repo</a>. I would love to read your comments and suggestions.</p> 
+      </div> 
+     </div> 
+    </article> 
+    <p class="reader-footer"><a class="reader-footer-source" href="https://cubox.pro/my/card?id=7174312545036012991" target="_blank"><span class="reader-footer-source-label">跳转到 Cubox 查看</span></a></p>
+   </div>
+  </div>
+  <script type="text/javascript" src="https://cubox.pro/article/js/reader.js"></script>
+ </body>
+</html>

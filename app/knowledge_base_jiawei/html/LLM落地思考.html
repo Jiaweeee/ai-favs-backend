@@ -1,0 +1,108 @@
+<html id="html-top" lang="zh">
+ <head>
+  <meta charset="UTF-8">
+  <title>LLM落地思考</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="icon" href="https://cubox.pro/my/favicon.svg" type="image/x-icon">
+  <link href="https://cubox.pro/article/css/reader.css" rel="stylesheet">
+ </head>
+ <body ontouchstart>
+  <div class="reader-page">
+   <div>
+    <h1 class="reader-title">LLM落地思考</h1>
+    <div class="reader-metadata">
+     <a href="https://mp.weixin.qq.com/s/rni_uKV8UUYMziNiyfOBiw" target="_blank">mp.weixin.qq.com</a><span class="reader-metadata-author">爱列图斯 思考的游鱼</span>
+    </div> 
+    <div> 
+     <p><span>一、引</span><span>子</span></p> 
+     <p><img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fsz_mmbiz_jpg%2FkafsF6PL44Cfnvqt6hZe1OttTcIFvSgiaAULE7AVH2kQlhReAia7lictxbufF5icHGj3drHnrfD7Ar4njltQSUiarIw%2F640%3Fwx_fmt%3Dwebp%26from%3Dappmsg%26tp%3Dwebp%26wxfrom%3D5%26wx_lazy%3D1%26wx_co%3D1&amp;valid=true" data-index="2" data-original- data-src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/kafsF6PL44Cfnvqt6hZe1OttTcIFvSgiaAULE7AVH2kQlhReAia7lictxbufF5icHGj3drHnrfD7Ar4njltQSUiarIw/640?wx_fmt=webp&amp;from=appmsg" data-w="1080" data-type="webp" data-s="300,640" data-ratio="0.5601851851851852" data-imgfile loading="lazy"></p> 
+     <article> 
+      <p>LLM技术为AI届带来了曙光与激情，经过这一年多的风起云涌，逐步的从demo向落地阶段进发，国内大模型也都在逐步的追上GPT-3.5，当达到GPT3.5的模型推理与知识储备后，在各个业务场景中落地的实用性就会大大提升了。</p> 
+      <p>但是从反方向来讲，当前大部分应用都是雷声大雨点小，也有部分原因是大家都处于探索阶段，还没有完成初期的验证来确定方向加强投入。通过对网上各个应用的检索梳理体验，以及对LLM技术文章的一些学习，整理了一下对LLM技术的落地分析。</p> 
+      <p>产业届落地的同时，面向普通人的AI应用也在不断的涌现，向妙鸭、全民舞王、哄哄模拟、kimi等产品在逐渐向大众普及。预计未来的几年，LLM带来的变革也会慢慢的进入每个人的生活中。本文章还是先从业务视角去写，今后打算也去分析一下普通人和孩子教育应该如何在未来使用LLM，比如如何帮老婆写论文~~</p> 
+      <p><span>二、LLM技术的应用分析</span></p> 
+      <p><span><img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fsz_mmbiz_jpg%2FkafsF6PL44Cfnvqt6hZe1OttTcIFvSgiaI24WAEO9SFcW4S86G4moYlX909zbia5Oygiby86852Qtc4coS4NMGhKA%2F640%3Fwx_fmt%3Dother%26from%3Dappmsg%26tp%3Dwebp%26wxfrom%3D5%26wx_lazy%3D1%26wx_co%3D1&amp;valid=true" data-index="3" data-original- data-src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/kafsF6PL44Cfnvqt6hZe1OttTcIFvSgiaI24WAEO9SFcW4S86G4moYlX909zbia5Oygiby86852Qtc4coS4NMGhKA/640?wx_fmt=other&amp;from=appmsg" data-w="1080" data-type="other" data-ratio="0.5601851851851852" data-imgfile loading="lazy"></span></p> 
+      <p>LLM在chatgpt出现后，让每个人都对AGI的到来充满了期许，但是LLM目前还并不是万能的（推理上还存在较大的提升空间，训练学习效率也明显不高），且与LLM搭配来实现AGI的视觉（sd、sora等）、触觉（IOT技术、ML）都还没有成熟。</p> 
+      <p>而且还有一个更大的问题等待解决，就是LLM这种由数据驱动的概率模型，和由第一性原理建立的数理模型，这两者究竟哪一种才可以更好的模拟世界，以及两者能否有一种很好的融合方式来共同模拟世界。在当前这个时间点，讨论落地或许还稍显幼稚，毕竟AGI的逐步推进会附带将前面的落地方案步步推翻，不过这也算是技术发展的必经之路，从幼稚中逐步萌芽茁壮。</p> 
+      <p>下面会从三个方面进行一些应用的分析：自然语言、ToB、ToC</p> 
+      <p><span>1、自然语言</span></p> 
+      <p><span><img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fsz_mmbiz_jpg%2FkafsF6PL44Cfnvqt6hZe1OttTcIFvSgia3manfLlXpatiawxgR8c5gO0NHVOhLGibsmaHNVaUAWlRADsdNEXYC5rA%2F640%3Fwx_fmt%3Dother%26from%3Dappmsg%26tp%3Dwebp%26wxfrom%3D5%26wx_lazy%3D1%26wx_co%3D1&amp;valid=true" data-index="4" data-original- data-src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/kafsF6PL44Cfnvqt6hZe1OttTcIFvSgia3manfLlXpatiawxgR8c5gO0NHVOhLGibsmaHNVaUAWlRADsdNEXYC5rA/640?wx_fmt=other&amp;from=appmsg" data-w="1080" data-type="other" data-ratio="0.5601851851851852" data-imgfile loading="lazy"></span></p> 
+      <p>首先从自然语言出发，毕竟LLM是语言模型，他带来的影响最直观能想到的就是对之前自然语言相关技术能力的提升。</p> 
+      <p>22年之前，国内自然语言的业务应用发展已经相对稳定，而发展较快的时期是16年智能音箱带来的NLP业务快速落地以及18年小红书、头条抖音带来的推广搜发展；NLP与知识图谱是主要的落地类型，NLG相对难以落地；20年后整个自然语言的应用进入较长时期的瓶颈期。</p> 
+      <p>在瓶颈期时，NLP和知识图谱的业务还是在不断的推进中，但是其落地的项目多为定制且低效。比如：</p> 
+      <p><span>1、实现某个NLP任务，比如对业务中的一些意图进行识别与分类，需要收集对应的业务数据上千条并进行人工标注，然后训练bert模型，再进行针对性的优化，时长可能要一个月，且交付后较难进行意图的新增和任务的泛化。因此很多时候甚至使用句式规则的方式更好进行维护与更新。</span></p> 
+      <p><span>2、构建知识图谱虽然可以有效的将公司级、行业级的知识承载起来并进行不断更新与可视化展示，但知识图谱的构建非常的复杂，需要与行业专家深度讨论，并要预见企业长远业务发展的可能性来制定schema，稍有不慎就可能图谱与业务错位，满盘皆输。并且一个图谱从建立、数据抽取、蒸馏、审查、可用、直到可与线上数据接轨做到自动更新，至少会有半年的周期。</span></p> 
+      <p><span>3、NLG基本上还是拼接为主，有多少人工规则就有多少智能。</span></p> 
+      <p>而LLM横空出世后，对NLP、NLG、KG都有较大的提升，因此严格意义上来说这三类场景都可以因为效率和效果的大幅提升而有更好、更多可能的落地方式。</p> 
+      <p><span>1、NLG：这里我们可以先分析NLG，因为传统方案的NLG基本是落地难落地少，而LLM最大的特点就是生成内容非常的牛，因此NLG可以当做一个全新的场景进行讨论，这也是当前很多偏ToC的业务探索方向，探索生成内容可以怎样创建新的场景。</span></p> 
+      <p><span>生成内容又可以分为：根据任务要求生成标准结果、根据信息进行内容创作两类，其中前者偏向B端，对指令遵循、准确性、输出可控等有较高的要求；后者偏向C端，在内容的趣味性、探索性、建议性、想象性上有一定的需求。而且，现在AI可以24小时不间断生成内容，理论上来说内容的供给变得无限大了，内容供给无限大后是否会出现质变的场景呢？</span></p> 
+      <p><span>2、</span><span>NLP：NLP能做的事情都比较标准化了，也有相当多的落地技术案例，比如客服、评论分析、信息抽取等等，而LLM的出现，很明显可以在这些场景上有更进一步的效果和效率的提升，甚至可以算是对原有的Bert方案的降维打击。也因此这个领域很多成熟企业现在都不太好过（很多原有的Bert方案的流程全部不需要了，在这个领域长期的经验积累被清空），后面会以智能客服为例分析。</span></p> 
+      <p><span>3、知识图谱KG：这个领域本身其实分为了多个技术路径，有NLP作为图谱前期构建的技术，有图数据库作为承载和查询的底座，也有图计算作为图谱应用推理的技术方案。并且知识图谱更像是符号派的分支，与LLM这个连接派的终极产物其实不那么搭。目前看来LLM在知识图谱的前期构建上（比如实体识别、三元组抽取）是可以有较好的效率提升的。</span></p> 
+      <p><span>但进一步想，知识图谱与LLM很可能是互补关系，毕竟LLM的参数难以理解，但知识图谱这种结构化的展示确实很好理解的，因此可以想象，今后的业务中使用知识图谱织成一张网来包裹住LLM，来让其输出的更加可控是很有可能的，并且图上的关联关系可以很好的为LLM做信息补足。</span></p> 
+      <p>以上是从技术手段上对LLM落地进行了一些思考，后面会针对B端和C端当前的一些现状来做一些分析。</p> 
+      <p><span>2、ToB业务</span></p> 
+      <p><span><img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fsz_mmbiz_jpg%2FkafsF6PL44Cfnvqt6hZe1OttTcIFvSgiaKLE46e2FOUicp7N8MQ4R7fLiaR1teqhMIUv07MUibsVEeXtqlsqsx21BA%2F640%3Fwx_fmt%3Dother%26from%3Dappmsg%26tp%3Dwebp%26wxfrom%3D5%26wx_lazy%3D1%26wx_co%3D1&amp;valid=true" data-index="5" data-original- data-src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/kafsF6PL44Cfnvqt6hZe1OttTcIFvSgiaKLE46e2FOUicp7N8MQ4R7fLiaR1teqhMIUv07MUibsVEeXtqlsqsx21BA/640?wx_fmt=other&amp;from=appmsg" data-w="1080" data-type="other" data-ratio="0.5601851851851852" data-imgfile loading="lazy"></span></p> 
+      <p>再说说ToB业务，目前LLM的业务应用性在随着模型能力、模型成本、模型应用工程三方面的发展逐步推进，从ToB业务上对大模型的期许上看，可能主要有三点：</p> 
+      <p><span>1、模型能力提升到可以对某个垂直行业的通用知识实现较专业的掌握（至少达到5年左右行业人员的认知），并对行业中出现的各类任务可以有较强的泛化能力。</span></p> 
+      <p><span>2、模型的训练成本与部署推理的成本降低到接近2年企业服务支出的费用成本左右（即客户期望应用LLM虽然有较高的投入，但是不要高于以往的非LLM服务的2倍）这样既可以享受大模型的泛化能力并贴合技术热点，又可以在成本支出上打出一年投入、两年回本的概念。</span></p> 
+      <p><span>3、模型应用工程的服务尽量标准且可控，通过应用工程来让LLM与企业业务流快速且顺畅的打通，最终促成在多业务场景落地。</span></p> 
+      <p>目前进展最快的是应用工程的探索推进，（因为模型能力受限于行业数据的短缺，而模型推理成本又受限算力的卡脖子），应用工程上有三个方向比较受关注：</p> 
+      <p><span>1、基于行业数据微调小体量模型，通过一些指令数据来实现小模型对某些固定任务的有效处理，这比较适用于一些较稳定的行业业务，这些业务的特点可能是多年不发生明显变化的，比如白电企业的基于知识库的问题分析和解决。</span></p> 
+      <p><span>2、采用LangChain、Agent思路的流程自动化工程框架，然后结合各种工具，并与企业的各数据库对接，从而实现更先进、可用性更高、泛化性更强的RPA方案。这也是当前做ToB业务Agent的主流方向，并且与当前很多企业正在进行的业务数字化相辅相成。</span></p> 
+      <p>这个方向对大模型的任务理解、编程能力、输出遵循有较高的要求，并且需要一些LLM前处理与后处理的工程来进行兜底，毕竟企业流程自动化一旦出错影响面很广。但可以预见的是这个方向是最有意义也是能承载厂商最多的方向，这个方向可以简单的归结为，使用大模型帮助企业完成数字化转型并直接升级至业务自动化。</p> 
+      <p>而因为这其中需要每一家大模型服务商针对性的帮助企业去设计大模型赋能的方案（因为每个企业的业务流、数据流都不相同）因此全部是定制化服务，因此可以承载非常多的业务。但是其业务爆发期判断可能要到几年后，待这次经济下行结束回暖后，目前可能需求方还是优先国企与金融，数字化较成熟且有国家AI+任务驱动的地方。</p> 
+      <p><span>3、采用RAG方案进行知识应用的工程框架，这方面包括AI搜索、智能客服、流水线问题定位等场景，通过给予大模型已有行业知识来让其在一定范围内解决问题。这个方向也是比较火的方向，可以将其看作现阶段能力还不足的大模型的工程优化，通过RAG解决模型幻觉、模型包含知识过时的问题。但是这个方向有个很明显的问题，就是整个前处理过程对整个方案的效果有着更高的影响（怎样拆query、怎样匹配检索、怎样排序、怎样供给信息）。</span></p> 
+      <p><span>3、ToC业务</span></p> 
+      <p><span><img data-fail="0" crossorigin="anonymous" src="https://cubox.pro/c/filters:no_upscale()?imageUrl=https%3A%2F%2Fmmbiz.qpic.cn%2Fsz_mmbiz_jpg%2FkafsF6PL44Cfnvqt6hZe1OttTcIFvSgiau6fQuSLyXk8gCLHNYd1TOmOp17icqNsGOeFdgUlpiaThoomLH8XKHhOg%2F640%3Fwx_fmt%3Dother%26from%3Dappmsg%26tp%3Dwebp%26wxfrom%3D5%26wx_lazy%3D1%26wx_co%3D1&amp;valid=true" data-index="6" data-original- data-src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/kafsF6PL44Cfnvqt6hZe1OttTcIFvSgiau6fQuSLyXk8gCLHNYd1TOmOp17icqNsGOeFdgUlpiaThoomLH8XKHhOg/640?wx_fmt=other&amp;from=appmsg" data-w="1080" data-type="other" data-ratio="0.5601851851851852" data-imgfile loading="lazy"></span></p> 
+      <p>最后说说ToC业务，由于我不是ToC出身，对这个方向看的不够透彻，首先是这个问题，ToC业务当前能够说有爆款吗？</p> 
+      <p>目前看来，chatgpt肯定是最爆的，其次可能是midjourney。然后c.ai、talkie等产品也还比较火，剩下的一些产品可能是短期火一下然后就沉寂了。目前暂时还没有出现像微信这样的大杀器C端产品，当然这也跟LLM的发展相关，毕竟突破才一年多。向QQ这种产品也是在互联网泡沫后逐步出现的，而且未来C端的产品形态也难说，毕竟当前C端最火的产品竟然是本应是产品架构最底层的模型端提供的。</p> 
+      <p>C端这个方向，有几个有意思的发现：</p> 
+      <p>1、淘宝店售卖国内无需翻墙版的镜像midjourney服务，有很多店都是月售上千，有几个今年新注册的淘宝店都已经总售卖上万份了，很多买家认为用一杯奶茶的钱（国内套皮midjourney基本上是20块钱一个月）来偶尔画一画图挺值得，而且很多是从小红书来的。</p> 
+      <p>考虑到AI绘画已经火了两年，专业玩家基本上都是自己部署SD或者使用discord，用国内版无需翻墙的套皮MJ应该大都是非专业人士，而MJ发布接口应该就是几个月前的事情，在淘宝上竟然已经有这么高的售卖量了，可见AI应用的门槛一旦降低，会有大批普通人因为兴趣和好奇涌入。</p> 
+      <p><span>2、与一些非AI圈的朋友交谈，普遍反应他们现在并不算信息过载需要AI去帮助处理总结，反而是因为信息渠道、信息茧房和时间不足导致的信息缺乏。因此跟他们聊Kimi的产品时，都表示比较满意，可以很好的找到了解到信息。可以猜测，需要智能助理帮助处理大量信息的可能只是少部分精英的需求，而对于很多普通人其实是缺少更全面认知世界的渠道。</span></p> 
+      <p><span>3、kimi最近的出圈爆发力非常强，2-3月增长了几十倍的用户量。比较赞同知乎大v Dr.Wu的话：Kimi所展现的产品力 + feature的先发优势 + 创始团队自身所带的技术光环 </span><span>+ 用户本身对于一些大厂偏见 + 各个渠道砸在广告的营销 = 一个出圈且用户能用的大模型产品。</span></p> 
+      <p>LLM带来了数不尽的新基于，但是也给很多企业带来了颠覆性的打击。下面会聊一下LLM下的智能客服。</p> 
+      <p><span>三、LLM下的智能客服企业</span></p> 
+      <p>chatgpt出现后，很多NLP从业人士都在激动的大喊，NLU是人工智能大脑这件事情终于被证实了，沉寂多年的NLP终于又能重复当年智能音箱时代的火热前景了；同时也有另一种说法，传统的NLP将不再有存在价值了。</p> 
+      <p>后来的发展也证实了这一结论，NLP工程师都在往LLM工程师或LLM应用框架的方向上转，传统的NLP被LLM后浪打死在沙滩上。而依托传统NLP的智能客服企业，并没有迎来新的发展，而是纷纷倒在了NLP新时代的到来时。</p> 
+      <p><span>1、传统智能客服倒了</span></p> 
+      <p>明星智能客服企业xxx欠薪，xxx智能客服企业解散团队，xxx企业转向出海客服方向，智能客服企业貌似在LLM到来之际都过得一般，为什么会这样。</p> 
+      <p>按照正常的逻辑，智能客服这种强文本处理的任务，应该是在LLM的加持下更加发光发亮，但是他们反而一个个倒下。这里面有其必然性和偶然性，并且与智能客服这个相对畸形的行业关联很大。</p> 
+      <p><span>2、必然性-智能客服的行业属性</span></p> 
+      <p>首先我们从产品的角度去看智能客服，该产品可以分为两部分：智能部分和客服部分。其中智能部分主要是基于NLP技术进行基于业务逻辑的AI对话管理；客服部分主要包括传统的客服坐席、内部数据查询台、AI与IM的对接、用户交流界面、接线调度与工单分配、以及一部分与运营商对接的外呼服务。智能客服大部分解决的是什么问题呢？一个是提供智能部分的服务，一个是提供客服部分的类OA工具。而麻烦的点就在于后半部分。</p> 
+      <p>首先对于一个企业而言，客服做的到底是什么事呢？售前访客咨询、售中方案建议、售后问题解答。售前售中售后，这是一个企业对客户服务的全流程。因此，客服的事情对于企业来说非常重要，客服的效果也是企业非常看重的，可以说是能达到鸡蛋里挑骨头的程度。</p> 
+      <p>其次，要做好客户服务，是需要企业产品的详细数据与用户数据两方关键信息的，而这两方信息都非常的重要且机密，因此在智能客服企业进行赋能时，无法获取这两方数据的关键信息，巧妇难为无米之炊。因此很多智能客服服务采取了本地部署的方式，而这又是吃力不讨好且难有积累的事情。</p> 
+      <p>最后，智能客服为客户提供的平台，本身是一套包括AI的客服服务管理流程，而这种客服管理流程是非常的企业个性化的，可以说每个企业都会根据自己的业务形态来决定自己的客服流程，一个saas公司有什么权威性来达到为客户（尤其是大客户）制定流程的地位呢？因此智能客服企业在交付大客户时，不光要模型本地化，甚至整个产品框架都要定制开发。</p> 
+      <p>因此，最后可以发现，智能客服企业在这个过程中，模型无法迭代，数据不能收集，产品功能东一套西一套，行业认知只有皮毛。最终，也就沦为东软国际这类外包服务商，且他们的成本比外包还高，在LLM的今天，自然失去其意义。</p> 
+      <p><span>3、偶然性-开源模型的飞速进展</span></p> 
+      <p>相信22年底这些企业看到chatgpt后，一定第一时间也启动了大模型的战略。但是苦于数据在客户那里，只能从公开数据那里一点点搞，而这又是一个高成本高投入的事情，因此虽然他们有想法，但是当时难以启动。</p> 
+      <p>本来如果大模型只是几个大厂有资格成为玩家的话，这些企业还是可以继续活几年，大不了就是将大模型接入作为可选服务。然而开源模型在23年中迅速腾飞，各种6B、13B级别的模型开源发布，甚至还有7B的moe模型。而且模型推理工程的优化，让很多企业购买十几万的服务器资源就可以在自己业务上运行一个不大的模型了。这给了这些智能客服企业一记重创。</p> 
+      <p>而且大模型巩固了共识，行业数据非常的有价值，这时候，智能客服企业还能从客户那里收到钱么？免费用估计都不再用了。</p> 
+      <p>据我自己估算，搭建智能客服的客服部分的功能，使用第三方IM服务，前期大概需要4人2个月的开发量，即中大型企业完全可以像开发OA一样开发一套客服平台，然后这套客服平台可以安全的对接自己的各种业务数据库。</p> 
+      <p>同时，采用开源或者国内智谱、文心、百川等企业提供的13B级模型，本地部署在自己的内部系统中，虽然需要投入算力，但是算力的价值已经是世界共识了，而大模型的故事可以给企业带来很多资本届的好处，因此，智能客服的大量优质大客户，会纷纷选择自己搭建智能客服平台。</p> 
+      <p>再结合大模型企业提供的技术服务，基于大模型搭建LangChain、RAG框架，在智能客服上还可以继续实现RPA自动流程。可以大胆的这样讲，智能客服的企业外部需求，终究是要被证伪了。</p> 
+      <p><span>4、智能客服的结局</span></p> 
+      <p>我个人的看法，痛定思痛，转化为LLM技术支持方，专注发力LLM的工程化应用方向，去为企业提供更好的LLM本地部署和工程化，走IBM的企业服务道路，可能是最好的选择了。毕竟各行各业+LLM的转型还是有很大的市场的，大厂也难以全部吃掉，甚至可以作为大厂大模型的工程分包商。（类似于华为卖企业网关、路由器等网络设备，需要在各个城市找一些工程承包商来根据每个企业办公室的具体格局布网施工一个逻辑）</p> 
+      <p>或者就是转变赛道了，向智齿客服，他们借助这两年国内出海的兴起，以及中东、东南亚需求的旺盛，提供在这个方向的智能客服国内服务，这可能还是有一些需求的。</p> 
+      <p><span>5、LMops</span></p> 
+      <p>最近有个很火的概念，LMops，这也是智能客服企业可以转向的一个方向。但是这个方向依旧是在强<span>业务关联上做服务。</span><span>虽然LMops确实当前挺有用的，做复杂prompt的多模型效果测试，做langchain的可视化设计，但有几个隐患点思</span>考<span>：</span></p> 
+      <p>1、LMops是以LLM为核心的任务链路调度平台，其真正能发挥作用一定是需要跟企业业务流强绑定的（类似于智能客服里的对话管理流程），同时LMops一定需要有企业数据库的高度权限，才能找到较好的解决问题的关键信息输入。这种品类做开源和类似IBM的服务咨询还行，但要做成一个通用平台就难了，经验积累难与具体业务解藕。</p> 
+      <p>2、目前的LLM模型虽然多，但是并不是因为能力不同而需要调度（sd模型确实能力区分度相对高），更多是根据任务难度来做调度，即考虑推理成本和模型能力，为某个任务选用最合适的模型。就如GPT4也可以较好的完成编程模型的任务一样，在今后推理成本会继续下降的预期下，是否需要因为成本考虑而用多模型处理难度不同的任务呢？还是单模型+prompt工程更好用？</p> 
+      <p>3、新的技术发展，比如moe技术本身就在模型层面对不同能力的模型做调度，那么当moe再进一步，LMops的意义会不会就只剩下构建工作流的可视化链了。</p> 
+      <p>4、对LMops有个好玩的想法，是未来会有能力差异巨大的不同LLM模型，然后用户发布一个任务在市场上，多个LLM自行接单并完成，然后由一个审核模型审核，最后交付给用户。这种自动化的LLM调度，所需要的就是多种能力差异巨大的LLM（或者agent？）来完成。只在一种任务能力下调出一个gpt4强度的LLM不知是否可能~~</p> 
+      <p><span>四、LLM时代下，未来何去</span></p> 
+      <p>1、对于LLM，感觉首先要看的还是推理能力提升的速度。GPT3.5到GPT4（2023年3月版）的提升是令人震惊的，但GPT4制造的LLM天花板，至今无人突破，GPT4自己的新版本也无法突破。GPT5能在推理上更进一步吗？多久才能出来呢，这都是未知，而在未知下，难以对LLM的智力增长作出合理判断。而智力是直接影响他能解决的问题广度的，假设模型的智力为n，那么他能解决的问题至少也应该是<span>n^n</span><span>的增长级别。</span></p> 
+      <p><span>2、模型决定能力的上限，工具、框架决定能力的下限。工具、框架在模型能力不足时，是很好的补充手段，可以让模型在不够强的时候也达到交付要求。但是工具和框架不应该投入过多，当模型能力大幅提升后，之前的工具和框架大概率是要重新搭建适配的。</span></p> 
+      <p><span>3、LLM与数理逻辑能够很好的结合吗？这可能很关键，如果真正出现结合的可能，让LLM能够使用数千年积累的人类智慧结晶，难以想象其影响。</span></p> 
+      <p><span>4、作为中台端AI产品，在技术与应用的中间搭桥，可能未来也会向智能客服一样被消亡。要不就去前端，直接融入行业和业务；要不就去后端，融入LLM的研发中。未来多年后，AI可能就像当前的宽带一样普及，而在这个时代中做个AI服务工程师其实也挺不错的。</span></p> 
+      <p>5、大模型能否具有建模的能力呢？即大模型能否对现实事件进行抽象，对现实问题进行数学建模然后解决问题。目前看来大模型还没有对具体问题、具体示例抽象化的能力，如果今后其可以实现，这可能会是新的突破，即模型为解决具体问题而建立抽象数理模型，调用数理工具解决然后再具象化为具体答案。这有可能是一种自指现象，即模型自发的自我调用。根据侯世达的GEB，自指有可能是智慧产生的重要现象之一。</p> 
+      <p>让AI画一副有埃舍尔思维的图，还是太难了，很难get到精髓，生成的大都是各种楼梯或者螺旋。。。。</p> 
+      <p>挑了几个还可以的：</p> 
+     </article> 
+    </div> 
+    <p class="reader-footer"><a class="reader-footer-source" href="https://cubox.pro/my/card?id=7175543939959620080" target="_blank"><span class="reader-footer-source-label">跳转到 Cubox 查看</span></a></p>
+   </div>
+  </div>
+  <script type="text/javascript" src="https://cubox.pro/article/js/reader.js"></script>
+ </body>
+</html>

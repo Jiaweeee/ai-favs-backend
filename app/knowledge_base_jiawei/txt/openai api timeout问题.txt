@@ -1,0 +1,7 @@
+openai api timeout问题
+     
+     想问下，openai api request time out, 是不是 VPN 的问题
+     
+     可以自己搞一个服务器代理，如果你有自己服务器，那么用 Nginx 配置一下很简单，如果没有，可以用 Cloudflare Worker 做代理。
+     https://github.com/qiayue/php-openai-gpt-stream-chat-api-webui/blob/main/cloudflare.worker.js 
+Cubox 链接: https://cubox.pro/my/card?id=7148593257058930156
