@@ -4,6 +4,7 @@ from langserve import add_routes
 from dotenv import load_dotenv
 from langchain.chat_models.openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
+from app.chat import create_chain
 
 load_dotenv()
 
@@ -21,13 +22,10 @@ async def save_link():
 async def save_file():
     pass #TODO
 
-llm = ChatOpenAI()
-prompt = ChatPromptTemplate.from_template("{question}")
-llm_chain = prompt | llm
-
+chat_chain = create_chain()
 add_routes(
     app,
-    llm_chain,
+    chat_chain,
     path="/chat",
 )
 

@@ -25,7 +25,11 @@ def load_vector_store() -> VectorStore:
 
 def ingest_docs():
   docs = []
-  text_splitter = RecursiveCharacterTextSplitter()
+  text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200,
+    add_start_index=True
+  )
 
   for root, _, files in os.walk(KNOWLEDGE_BASE_DIR):
     for file in files:
