@@ -4,11 +4,10 @@ the private knowledge base imported by ingest.py.
 Exit the app when user explicitly type 'quit'.
 """
 
-from ingest import load_vector_store
-from llm import openai, moonshot
+from app.utils.ingest import load_vector_store
+from .llm import openai, moonshot
 from langchain_core.retrievers import BaseRetriever
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough, Runnable
+from langchain_core.runnables import Runnable
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains.retrieval import create_retrieval_chain
@@ -36,6 +35,7 @@ def create_chat_history_aware_retriever(llm: LanguageModelLike):
   which might reference context in the chat history, formulate a standalone question \
   which can be understood without the chat history. Do NOT answer the question, \
   just reformulate it if needed and otherwise return it as is."""
+  
   history_aware_prompt = ChatPromptTemplate.from_messages([
      ("system", system_prompt),
      (MessagesPlaceholder("chat_history")),

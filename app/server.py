@@ -1,33 +1,12 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
-from langserve import add_routes
 from dotenv import load_dotenv
-from langchain.chat_models.openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from app.chat import create_chain
+from .routes.chat.router import router as chat_router
 
 load_dotenv()
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World!"}
-
-@app.post("/save_link")
-async def save_link():
-    pass #TODO
-
-@app.post("/save_file")
-async def save_file():
-    pass #TODO
-
-chat_chain = create_chain()
-add_routes(
-    app,
-    chat_chain,
-    path="/chat",
-)
+app.include_router(chat_router)
 
 if __name__ == "__main__":
     import uvicorn
