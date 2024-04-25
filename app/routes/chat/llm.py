@@ -5,4 +5,4 @@ def openai():
   return ChatOpenAI()
 
 def moonshot():
-  return Moonshot(model="moonshot-v1-128k")
+  return Moonshot(model="moonshot-v1-8k")

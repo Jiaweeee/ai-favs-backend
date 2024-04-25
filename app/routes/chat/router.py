@@ -5,10 +5,10 @@ from .chain import create_chain
 
 class ChatRequest(BaseModel):
   input: str
-  chat_history: Optional[List[str]] = None
+  chat_history: Optional[List[str]] = []
 
 class ChatResponse(BaseModel):
-  answer: str
+  content: str
   sources: Optional[List[str]] = None
 
 router = APIRouter()
@@ -18,11 +18,11 @@ rag_chain = create_chain()
 async def chat(req: ChatRequest):
   response = rag_chain.invoke({
     "input": req.input,
-    "chat_history": []
+    "chat_history": req.chat_history
   })
   answer = response["answer"]
   return ChatResponse(
-    answer=answer,
+    content=answer,
     sources=["www.baidu.com", "www.google.com"]
   )
 
