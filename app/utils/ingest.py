@@ -6,8 +6,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import VectorStore
 
-KNOWLEDGE_BASE_DIR = f'{os.curdir}/app/knowledge_base_jiawei/txt'
-INDEX_NAME = 'jiawei'
+KNOWLEDGE_BASE_DIR = f'{os.curdir}/app/example_data/txt'
+INDEX_NAME = 'index'
 VECTOR_STORE_DIR = f'{os.curdir}/app/db'
 
 def get_embeddings():
