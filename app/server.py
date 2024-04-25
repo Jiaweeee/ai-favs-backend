@@ -6,6 +6,10 @@ load_dotenv()
 
 app = FastAPI()
 
+@app.get("/")
+async def root():
+    return "Hello"
+
 app.include_router(chat_router)
 
 if __name__ == "__main__":
