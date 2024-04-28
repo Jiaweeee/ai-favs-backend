@@ -13,7 +13,7 @@ from langchain.chains.history_aware_retriever import create_history_aware_retrie
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.language_models import LanguageModelLike
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage
 
 RESPONSE_TEMPLATE = """You are an assistant for question-answering tasks. \
 Use the following pieces of retrieved context to answer the question. \
@@ -69,5 +69,5 @@ if __name__ == '__main__':
     response = rag_chain.invoke({"input": user_input, "chat_history": chat_history})
     answer = response["answer"]
     print(answer)
-    chat_history.extend([HumanMessage(content=user_input), answer])
+    chat_history.extend([HumanMessage(content=user_input), AIMessage(content=answer)])
     print("\n")

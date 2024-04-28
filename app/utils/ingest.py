@@ -14,7 +14,8 @@ def get_embeddings():
   return OpenAIEmbeddings()
 
 def load_vector_store() -> VectorStore:
-  if os.path.exists(f'{VECTOR_STORE_DIR}/{INDEX_NAME}') == False:
+  index_file_path = f"{VECTOR_STORE_DIR}/{INDEX_NAME}.faiss"
+  if os.path.exists(index_file_path) == False:
     ingest_docs()
   return FAISS.load_local(
     folder_path=VECTOR_STORE_DIR,
@@ -24,6 +25,7 @@ def load_vector_store() -> VectorStore:
   )
 
 def ingest_docs():
+  print("start ingesting docs")
   docs = []
   text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
