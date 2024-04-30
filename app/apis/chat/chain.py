@@ -4,7 +4,7 @@ the private knowledge base imported by ingest.py.
 Exit the app when user explicitly type 'quit'.
 """
 
-from app.utils.ingest import load_vector_store
+from app.utils.vectorstore import load_vector_store
 from .llm import openai, moonshot
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.runnables import Runnable

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
 from .apis.chat.router import router as chat_router
+from .apis.content.router import router as content_router
 
 load_dotenv()
 
@@ -11,6 +12,7 @@ async def root():
     return "Hello"
 
 app.include_router(chat_router)
+app.include_router(content_router)
 
 if __name__ == "__main__":
     import uvicorn

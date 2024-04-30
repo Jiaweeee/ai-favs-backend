@@ -1,4 +1,0 @@
-复旦大学张奇教授团队写了一本在线免费的电子书，《大规模语言模型：从理论到实践》，https://intro-llm.github.io，大概有 300 页篇幅，将大模型从理论到实战的每个阶段都描述的较为清楚。
-     
-     全文在线阅读地址：https://intro-llm.github.io/chapter/LLM-TAP.pdf 
-Cubox 链接: https://cubox.pro/my/card?id=7148975503376911391

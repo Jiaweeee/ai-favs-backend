@@ -20,6 +20,7 @@ faiss-cpu = "^1.8.0"
 langchain-cli = ">=0.0.15"
 langsmith = "^0.1.51"
 selenium = "^4.20.0"
+motor = "^3.4.0"
 
 
 [tool.poetry.group.dev.dependencies]

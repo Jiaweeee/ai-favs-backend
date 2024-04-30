@@ -5,6 +5,7 @@ from langchain_community.vectorstores.faiss import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import VectorStore
+from langchain_core.documents import Document
 
 KNOWLEDGE_BASE_DIR = f'{os.curdir}/app/example_data/txt'
 INDEX_NAME = 'index'

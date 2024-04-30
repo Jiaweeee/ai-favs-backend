@@ -1,13 +1,9 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Optional, List, Any
-from .chain import create_chain
+from typing import Optional, List
 from langsmith import traceable
-
-class CommonResponse(BaseModel):
-  code: int
-  msg: Optional[str] = None
-  data: Optional[Any] = None
+from app.apis.chat.chain import create_chain
+from app.apis.models import CommonResponse
 
 class ChatRequest(BaseModel):
   input: str
@@ -19,11 +15,11 @@ class ChatResponse(BaseModel):
   suggested_questions: Optional[List[str]] = None
 
 router = APIRouter()
-rag_chain = create_chain()
 
 @traceable
 @router.post("/chat", response_model=CommonResponse)
 async def chat(req: ChatRequest):
+  rag_chain = create_chain()
   response = rag_chain.invoke({
     "input": req.input,
     "chat_history": req.chat_history
