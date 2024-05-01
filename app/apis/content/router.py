@@ -3,11 +3,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-import re
 from app.apis.models import CommonResponse
 from app.utils import vectorstore
 from .models import ContentAddRequest
-from .database import add_content
+from .database import add_content, update_content
+from .chain import create_chain
+import re
 
 router = APIRouter()
 
@@ -28,37 +29,50 @@ class WeChatArticleProcessor():
     return webdriver.Chrome(service=service, options=options)
 
   async def process(self):
+    print("Start processing...")
     driver = self.driver
     driver.get(self.url)
     driver.implicitly_wait(10)
-    # 1. Extract content and metadata
-    content = driver.find_element(by=By.CLASS_NAME, value="rich_media_content")
-    if content:
-      full_text = content.text
+    # Extract content and metadata
     title = driver.find_element(By.XPATH, '//*[@property="og:title"]').get_attribute("content")
     description = driver.find_element(By.XPATH, '//*[@property="og:description"]').get_attribute("content")
     thumbnail = driver.find_element(By.XPATH, '//*[@property="og:image"]').get_attribute("content")
     print('Extract content and metadata: DONE')
 
-    # 2. Generate useful info by LLM
-    # TODO
-
-    # 3. Save the content into db
+    # Save the metadata into db
     content_item = await add_content({
       "url": self.url,
       "title": title,
       "description": description,
       "thumbnail": thumbnail,
     })
-    print('Save the content into db: DONE')
+    print('Save the metadata into db: DONE')
 
-    # 4. Save the content into vector store
+    # Save the content into vector store
+    content = driver.find_element(by=By.CLASS_NAME, value="rich_media_content")
+    if content:
+      full_text = content.text
     if content_item and full_text:
       vectorstore.save_content(full_text, metadata={
         "content_id": content_item.id,
         "source": content_item.url
       })
       print('Save the content into vector store: DONE.')
+
+    # Generate useful info by LLM
+    if content_item:
+      chain = create_chain()
+      response = chain.invoke({"content": full_text})
+      data = {}
+      try:
+        data["ai_labels"] = response["labels"]
+        data["ai_summary"] = response["summary"]
+        data["ai_highlights"] = response["highlights"]
+      except Exception:
+        print("Generate useful info by LLM: Exception")
+      await update_content(id=content_item.id, data=data)
+      print("Generate useful info by LLM: DONE")
+    
 
 def is_wechat_article(url) -> bool:
   """

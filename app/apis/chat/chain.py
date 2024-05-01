@@ -5,7 +5,7 @@ Exit the app when user explicitly type 'quit'.
 """
 
 from app.utils.vectorstore import load_vector_store
-from .llm import openai, moonshot
+from app.utils.llm import get_llm
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.runnables import Runnable
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -24,6 +24,7 @@ Use three sentences maximum and keep the answer concise.\
 
 def get_retriever() -> BaseRetriever:
   vector_store = load_vector_store()
+  print("Load vectore stoe: DONE")
   return vector_store.as_retriever()
 
 def create_chat_history_aware_retriever(llm: LanguageModelLike):
@@ -48,12 +49,12 @@ def create_chat_history_aware_retriever(llm: LanguageModelLike):
   )
 
 def create_chain() -> Runnable:
-  llm = openai()
+  llm = get_llm()
   retriever = create_chat_history_aware_retriever(llm)
   qa_prompt = ChatPromptTemplate.from_messages([
      ("system", RESPONSE_TEMPLATE),
      MessagesPlaceholder("chat_history"),
-     ("human" "{input}")
+     ("human", "{input}")
   ])
   qa_chain = create_stuff_documents_chain(llm, qa_prompt)
   rag_chain = create_retrieval_chain(retriever=retriever, combine_docs_chain=qa_chain)

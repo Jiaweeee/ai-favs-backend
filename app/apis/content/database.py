@@ -19,12 +19,12 @@ async def add_content(data: dict) -> Optional[ContentItem]:
   
 
 async def update_content(id: str, data: dict) -> bool:
-  item = await content_collection.find_one({"_id", ObjectId(id)})
+  item = await content_collection.find_one({"_id": ObjectId(id)})
   if item:
-    updated_item = await content_collection.update_one({
+    updated_item = await content_collection.update_one(
       {"_id": ObjectId(id)},
-      {"$set", data}
-    })
+      {"$set": data}
+    )
     if updated_item:
       return True
     return False
@@ -35,5 +35,9 @@ def to_content_item(data: dict) -> ContentItem:
     url=data["url"],
     title=data["title"],
     description=data["description"],
-    thumbnail=data["thumbnail"]
+    thumbnail=data["thumbnail"],
+    ai_labels=data.get('ai_labels', None),
+    ai_highlights=data.get('ai_highlights', None),
+    ai_summary=data.get('ai_summary', None),
+    ai_podcast_url=data.get('ai_podcast_url', None)
   )
