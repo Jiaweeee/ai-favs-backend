@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from app.apis.models import CommonResponse
 from app.utils import vectorstore
 from .models import ContentAddRequest
-from .database import add_content, update_content
+from .database import add_content, update_content, retrieve_content_items
 from .chain import create_chain
 import re
 
@@ -28,11 +28,11 @@ class WeChatArticleProcessor():
     options.add_argument("--disable-gpu")
     return webdriver.Chrome(service=service, options=options)
 
-  async def process(self):
+  def process(self):
     print("Start processing...")
     driver = self.driver
     driver.get(self.url)
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(5)
     # Extract content and metadata
     title = driver.find_element(By.XPATH, '//*[@property="og:title"]').get_attribute("content")
     description = driver.find_element(By.XPATH, '//*[@property="og:description"]').get_attribute("content")
@@ -40,7 +40,7 @@ class WeChatArticleProcessor():
     print('Extract content and metadata: DONE')
 
     # Save the metadata into db
-    content_item = await add_content({
+    content_item = add_content({
       "url": self.url,
       "title": title,
       "description": description,
@@ -60,7 +60,7 @@ class WeChatArticleProcessor():
       print('Save the content into vector store: DONE.')
 
     # Generate useful info by LLM
-    if content_item:
+    if content_item and full_text:
       chain = create_chain()
       response = chain.invoke({"content": full_text})
       data = {}
@@ -70,7 +70,7 @@ class WeChatArticleProcessor():
         data["ai_highlights"] = response["highlights"]
       except Exception:
         print("Generate useful info by LLM: Exception")
-      await update_content(id=content_item.id, data=data)
+      update_content(id=content_item.id, data=data)
       print("Generate useful info by LLM: DONE")
     
 
@@ -84,13 +84,13 @@ def is_wechat_article(url) -> bool:
   return False
 
 
-async def process_content(url: str):
+def process_content(url: str):
   if is_wechat_article(url) == False:
     # Only support wechat article for now.
     raise Exception("unsupported content source")
 
   processor = WeChatArticleProcessor(url=url)
-  await processor.process()
+  processor.process()
   print("parse url success")
 
 @router.post("/content/add", response_model=CommonResponse)
@@ -99,6 +99,15 @@ async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks)
   return CommonResponse(
     code=200,
     msg='success'
+  )
+
+@router.get("/content/list/get", response_model=CommonResponse)
+async def get_content_list():
+  items = retrieve_content_items()
+  return CommonResponse(
+    code=200,
+    msg='success',
+    data=items
   )
 
 __all__ = ["router"]
