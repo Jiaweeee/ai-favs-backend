@@ -1,10 +1,12 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
-from langchain_core.messages import BaseMessage
+from langchain_core.messages import HumanMessage, AIMessage
+
+Message = HumanMessage | AIMessage
 
 class ChatRequest(BaseModel):
   input: str
-  chat_history: Optional[List[BaseMessage]] = []
+  chat_history: Optional[List[Message]] = []
 
 class ChatResponse(BaseModel):
   content: str

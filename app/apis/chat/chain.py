@@ -79,8 +79,8 @@ def create_follow_ups_chain() -> Runnable:
   chat history: {chat_history} \
   question: {input} \
 
-  Return the information in simplified Chinese. \
   The output should be in the format of a json list with the key 'follow_ups' \
+  The questions in the json list should be in simplified Chinese. \
   """
   output_parser = JsonOutputParser()
   prompt = PromptTemplate(

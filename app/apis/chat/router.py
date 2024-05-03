@@ -15,7 +15,6 @@ async def chat(req: ChatRequest):
     "chat_history": req.chat_history
   })
   answer = response["answer"]
-  print(response)
   return CommonResponse(
     code=200,
     msg='success',

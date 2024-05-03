@@ -7,8 +7,8 @@ from typing import List
 RESPONSE_TEMPLATE = """
 Please analyze the content provided below and return the following information in simplified Chinese.\
 
-content: {content}\
-{format_instructions}
+content: {content} \
+{format_instructions} \
 """
 
 class AISummary(BaseModel):
