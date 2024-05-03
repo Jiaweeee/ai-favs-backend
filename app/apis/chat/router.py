@@ -1,34 +1,38 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
-from typing import Optional, List
 from langsmith import traceable
-from app.apis.chat.chain import create_chain
+from app.apis.chat.chain import create_rag_chain, create_follow_ups_chain
 from app.apis.models import CommonResponse
-
-class ChatRequest(BaseModel):
-  input: str
-  chat_history: Optional[List[str]] = []
-
-class ChatResponse(BaseModel):
-  content: str
-  sources: Optional[List[str]] = None
-  suggested_questions: Optional[List[str]] = None
+from .models import ChatRequest, ChatResponse
 
 router = APIRouter()
 
 @traceable
 @router.post("/chat", response_model=CommonResponse)
 async def chat(req: ChatRequest):
-  rag_chain = create_chain()
+  rag_chain = create_rag_chain()
   response = rag_chain.invoke({
     "input": req.input,
     "chat_history": req.chat_history
   })
   answer = response["answer"]
+  print(response)
   return CommonResponse(
     code=200,
     msg='success',
     data=ChatResponse(content=answer)
+  )
+
+@router.get("/chat/followups/get", response_model=CommonResponse)
+async def chat_followups_get(req: ChatRequest):
+  follow_ups_chain = create_follow_ups_chain()
+  response = follow_ups_chain.invoke({
+    "input": req.input,
+    "chat_history": req.chat_history
+  })
+  return CommonResponse(
+    code=200,
+    msg='success',
+    data=response
   )
 
 __all__ = ["router"]

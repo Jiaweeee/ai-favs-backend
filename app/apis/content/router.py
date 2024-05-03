@@ -68,8 +68,8 @@ class WeChatArticleProcessor():
         data["ai_labels"] = response["labels"]
         data["ai_summary"] = response["summary"]
         data["ai_highlights"] = response["highlights"]
-      except Exception:
-        print("Generate useful info by LLM: Exception")
+      except Exception as e:
+        print(f"Generate useful info by LLM error: {e}")
       update_content(id=content_item.id, data=data)
       print("Generate useful info by LLM: DONE")
     
