@@ -1,7 +1,7 @@
 from typing import Optional, Any
 from pydantic import BaseModel
 
-class CommonResponse(BaseModel):
+class BaseResponse(BaseModel):
   """
   The standard response data structure for all apis.
   """

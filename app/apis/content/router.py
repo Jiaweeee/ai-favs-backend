@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from app.apis.models import CommonResponse
+from app.apis.models import BaseResponse
 from app.utils import vectorstore
 from .models import ContentAddRequest
 from .database import add_content, update_content, retrieve_content_items
@@ -93,18 +93,18 @@ def process_content(url: str):
   processor.process()
   print("parse url success")
 
-@router.post("/content/add", response_model=CommonResponse)
+@router.post("/content/add", response_model=BaseResponse)
 async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks):
   background_tasks.add_task(process_content, req.url)
-  return CommonResponse(
+  return BaseResponse(
     code=200,
     msg='success'
   )
 
-@router.get("/content/list/get", response_model=CommonResponse)
+@router.get("/content/list/get", response_model=BaseResponse)
 async def get_content_list():
   items = retrieve_content_items()
-  return CommonResponse(
+  return BaseResponse(
     code=200,
     msg='success',
     data=items
