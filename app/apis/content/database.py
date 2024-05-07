@@ -29,7 +29,7 @@ def update_content(id: str, data: dict) -> bool:
 
 def retrieve_content_items():
   items = []
-  for item in content_collection.find():
+  for item in content_collection.find().sort({"_id": -1}): # sort by time, descending
     items.append(to_content_item(item))
   return items
 

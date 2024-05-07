@@ -15,10 +15,19 @@ async def chat(req: ChatRequest):
     "chat_history": req.chat_history
   })
   answer = response["answer"]
+  unique_sources = set()
+  for document in response.get("context", []):
+    source = document.metadata.get('source')
+    if source:
+      unique_sources.add(source)
+  source_list = list(unique_sources)
   return BaseResponse(
     code=200,
     msg='success',
-    data=ChatResponse(content=answer)
+    data=ChatResponse(
+      content=answer,
+      sources=source_list
+    )
   )
 
 @router.get("/chat/followups/get", response_model=BaseResponse)

@@ -46,7 +46,7 @@ INFO:     Application startup complete.
 ## 3. 本地运行 chat 脚本
 目前项目中有一个 /chat 接口，它接收用户当前的提问和之前的聊天历史作为 context，用 RAG + LLM 输出回答。为方便本地测试，我们可以直接在终端运行脚本来进行问答。在项目根目录运行下面命令：
 ```
-python -m app.routes.chat.chain
+python demo/chat.py
 ```
 等待一段时间后，出现下面内容：
 ![](./img/run_chat_locally.png)
