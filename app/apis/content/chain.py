@@ -1,24 +1,21 @@
 from app.utils.llm import get_llm
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from pydantic import BaseModel, Field
-from typing import List
 
 RESPONSE_TEMPLATE = """
 Please analyze the content provided below and return the following information in simplified Chinese.\
 
 content: {content} \
-{format_instructions} \
-"""
 
-class AISummary(BaseModel):
-  labels: List[str] = Field(description='A list of no more than 5 keywords that are most closely related to the content.')
-  summary: str = Field(description='A summary of the content.')
-  highlights: List[str] = Field(description='The main points highlighted in the content.')
+The result you return should be in json format that includes the following keys: \
+- labels: A list of no more than 5 keywords that are most closely related to the content. \
+- summary: A string of summary of the content. \
+- highlights: A list of the main points highlighted in the content. \
+"""
 
 def create_chain():
   llm = get_llm()
-  output_parser = JsonOutputParser(pydantic_object=AISummary)
+  output_parser = JsonOutputParser()
   prompt = PromptTemplate(
     template=RESPONSE_TEMPLATE,
     input_variables=["content"],

@@ -1,12 +1,10 @@
 from fastapi import APIRouter
-from langsmith import traceable
 from app.apis.chat.chain import create_rag_chain, create_follow_ups_chain
 from app.apis.models import BaseResponse
 from .models import ChatRequest, ChatResponse
 
 router = APIRouter()
 
-@traceable
 @router.post("/chat", response_model=BaseResponse)
 async def chat(req: ChatRequest):
   rag_chain = create_rag_chain()
@@ -29,6 +27,14 @@ async def chat(req: ChatRequest):
       sources=source_list
     )
   )
+
+@router.post("/chat/stream")
+async def chat_stream(req: ChatRequest):
+  rag_chain = create_rag_chain()
+  return rag_chain.stream({
+    "input": req.input,
+    "chat_history": req.chat_history
+  })
 
 @router.get("/chat/followups/get", response_model=BaseResponse)
 async def chat_followups_get(req: ChatRequest):
