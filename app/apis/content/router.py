@@ -1,14 +1,15 @@
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Query
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from typing import Optional
 from app.apis.models import BaseResponse
 from app.utils import vectorstore
-from .models import ContentAddRequest
+from .models import ContentAddRequest, ContentItem
 from .database import add_content, update_content, retrieve_content_items
-from .chain import create_chain
-import re
+from .chain import create_summary_chain, create_category_chain
+import re, hashlib
 
 router = APIRouter()
 
@@ -61,7 +62,7 @@ class WeChatArticleProcessor():
 
     # Generate useful info by LLM
     if content_item and full_text:
-      chain = create_chain()
+      chain = create_summary_chain()
       response = chain.invoke({"content": full_text})
       data = {}
       try:
@@ -72,7 +73,29 @@ class WeChatArticleProcessor():
         print(f"Generate useful info by LLM error: {e}")
       update_content(id=content_item.id, data=data)
       print("Generate useful info by LLM: DONE")
+
+    # Set proper category for the content
+    if content_item:
+      self._update_category(item=content_item)
     
+  def _update_category(self, item: ContentItem):
+    items = retrieve_content_items()
+    filtered_items = list(filter(lambda x: x.category != None, items))
+    categories = list(map(lambda x : {"name": x.category.name, "description": x.category.description}, filtered_items))
+    category_chain = create_category_chain()
+    target_category = category_chain.invoke({"item": item, "categories": categories})
+    print("Updating category")
+
+    def generate_category_id(name: str):
+      return hashlib.sha1(name.encode()).hexdigest()
+
+    update_content(item.id, {
+      "category": {
+        "id": generate_category_id(target_category["name"]),
+        "name": target_category["name"],
+        "description": target_category["description"]
+      }
+    })
 
 def is_wechat_article(url) -> bool:
   """
@@ -102,8 +125,8 @@ async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks)
   )
 
 @router.get("/content/list/get", response_model=BaseResponse)
-async def get_content_list():
-  items = retrieve_content_items()
+async def get_content_list(category_id: Optional[str]=Query(None)):
+  items = retrieve_content_items(category_id)
   return BaseResponse(
     code=200,
     msg='success',

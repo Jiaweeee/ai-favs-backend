@@ -4,6 +4,11 @@ from typing import Optional, List
 class ContentAddRequest(BaseModel):
   url: str
 
+class ContentCategory(BaseModel):
+  id: str
+  name: str
+  description: str
+
 class ContentItem(BaseModel):
   id: str = Field(...)
   url: str = Field(...)
@@ -15,3 +20,4 @@ class ContentItem(BaseModel):
   ai_summary: Optional[str] = None
   ai_highlights: Optional[List[str]] = None
   ai_podcast_url: Optional[str] = None
+  category: Optional[ContentCategory] = None
