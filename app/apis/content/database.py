@@ -12,7 +12,7 @@ def add_content(data: dict) -> Optional[ContentItem]:
   try:
     item = content_collection.insert_one(data)
     new_item = content_collection.find_one({"_id": item.inserted_id})
-    return to_content_item(new_item)
+    return _to_content_item(new_item)
   except DuplicateKeyError:
     print("A content item with the same URL already exists.")
     return None  
@@ -34,10 +34,25 @@ def retrieve_content_items(category_id: Optional[str] = None):
   else:
     cursor = content_collection.find()
   for item in cursor.sort({"_id": -1}): # sort by time, descending
-    items.append(to_content_item(item))
+    items.append(_to_content_item(item))
   return items
 
-def to_content_item(data: dict) -> ContentItem:
+def retrieve_categories():
+  """
+  Return all the categories existing in the knowledge base.
+  """
+  pipeline = [
+    {"$project": {"category_name": "$category.name"}},
+    {"$group": {"_id": "$category_name"}}
+  ]
+  unique_categories = list(content_collection.aggregate(pipeline))
+  categories = []
+  for category in unique_categories:
+    if category["_id"] is not None:
+      categories.append(category["_id"])
+  return categories
+
+def _to_content_item(data: dict) -> ContentItem:
   return ContentItem(
     id=str(data["_id"]),
     url=data["url"],
@@ -48,10 +63,10 @@ def to_content_item(data: dict) -> ContentItem:
     ai_highlights=data.get('ai_highlights', None),
     ai_summary=data.get('ai_summary', None),
     ai_podcast_url=data.get('ai_podcast_url', None),
-    category=to_category(data.get("category", None))
+    category=_to_category(data.get("category", None))
   )
 
-def to_category(data: dict) -> ContentCategory:
+def _to_category(data: dict) -> ContentCategory:
   if data == None:
     return None
   return ContentCategory(

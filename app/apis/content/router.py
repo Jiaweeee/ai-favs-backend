@@ -1,13 +1,10 @@
 from fastapi import APIRouter, BackgroundTasks, Query
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
+from playwright.sync_api import sync_playwright, Browser
 from typing import Optional
 from app.apis.models import BaseResponse
 from app.utils import vectorstore
 from .models import ContentAddRequest, ContentItem
-from .database import add_content, update_content, retrieve_content_items
+from .database import add_content, update_content, retrieve_content_items, retrieve_categories
 from .chain import create_summary_chain, create_category_chain
 import re, hashlib
 
@@ -15,73 +12,67 @@ router = APIRouter()
 
 class WeChatArticleProcessor():
   def __init__(self, url: str):
-    self.driver = self._get_chrome_driver()
     self.url = url
   
-  def _get_chrome_driver(self) -> webdriver.Chrome:
-    """
-    Build and return a Chrome web driver
-    """
-    driver_path = 'libs/chromedriver'
-    service = Service(executable_path=driver_path)
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    return webdriver.Chrome(service=service, options=options)
+  def _get_browser(self) -> Browser:
+    with sync_playwright() as playwright:
+      chromium = playwright.chromium
+      browser = chromium.launch(headless=True)
+      return browser
 
-  def process(self):
+  def run(self):
     print("Start processing...")
-    driver = self.driver
-    driver.get(self.url)
-    driver.implicitly_wait(5)
-    # Extract content and metadata
-    title = driver.find_element(By.XPATH, '//*[@property="og:title"]').get_attribute("content")
-    description = driver.find_element(By.XPATH, '//*[@property="og:description"]').get_attribute("content")
-    thumbnail = driver.find_element(By.XPATH, '//*[@property="og:image"]').get_attribute("content")
-    print('Extract content and metadata: DONE')
+    with sync_playwright() as playwright:
+      chromium = playwright.chromium
+      browser = chromium.launch(headless=True)
+      page = browser.new_page()
+      page.goto(self.url)
+      title = page.query_selector('meta[property="og:title"]').get_attribute("content")
+      description = page.query_selector('meta[property="og:description"]').get_attribute("content")
+      thumbnail = page.query_selector('meta[property="og:image"]').get_attribute("content")
+      print('Extract content and metadata: DONE')
 
-    # Save the metadata into db
-    content_item = add_content({
-      "url": self.url,
-      "title": title,
-      "description": description,
-      "thumbnail": thumbnail,
-    })
-    print('Save the metadata into db: DONE')
-
-    # Save the content into vector store
-    content = driver.find_element(by=By.CLASS_NAME, value="rich_media_content")
-    if content:
-      full_text = content.text
-    if content_item and full_text:
-      vectorstore.save_content(full_text, metadata={
-        "content_id": content_item.id,
-        "source": content_item.url
+      # Save the metadata into db
+      content_item = add_content({
+        "url": self.url,
+        "title": title,
+        "description": description,
+        "thumbnail": thumbnail,
       })
-      print('Save the content into vector store: DONE.')
+      print('Save the metadata into db: DONE')
 
-    # Generate useful info by LLM
-    if content_item and full_text:
-      chain = create_summary_chain()
-      response = chain.invoke({"content": full_text})
-      data = {}
-      try:
-        data["ai_labels"] = response["labels"]
-        data["ai_summary"] = response["summary"]
-        data["ai_highlights"] = response["highlights"]
-      except Exception as e:
-        print(f"Generate useful info by LLM error: {e}")
-      update_content(id=content_item.id, data=data)
-      print("Generate useful info by LLM: DONE")
+      # Save the content into vector store
+      content_element = page.query_selector(".rich_media_content")
+      if content_element:
+        full_text = content_element.text_content()
+      browser.close()
+      if content_item and full_text:
+        vectorstore.save_content(full_text, metadata={
+          "content_id": content_item.id,
+          "source": content_item.url
+        })
+        print('Save the content into vector store: DONE.')
 
-    # Set proper category for the content
-    if content_item:
-      self._update_category(item=content_item)
+      # Generate useful info by LLM
+      if content_item and full_text:
+        chain = create_summary_chain()
+        response = chain.invoke({"content": full_text})
+        data = {}
+        try:
+          data["ai_labels"] = response["labels"]
+          data["ai_summary"] = response["summary"]
+          data["ai_highlights"] = response["highlights"]
+        except Exception as e:
+          print(f"Generate useful info by LLM error: {e}")
+        update_content(id=content_item.id, data=data)
+        print("Generate useful info by LLM: DONE")
+
+      # Set proper category for the content
+      if content_item:
+        self._update_category(item=content_item)
     
   def _update_category(self, item: ContentItem):
-    items = retrieve_content_items()
-    filtered_items = list(filter(lambda x: x.category != None, items))
-    categories = list(map(lambda x : {"name": x.category.name, "description": x.category.description}, filtered_items))
+    categories = retrieve_categories()
     category_chain = create_category_chain()
     target_category = category_chain.invoke({"item": item, "categories": categories})
     print("Updating category")
@@ -113,7 +104,7 @@ def process_content(url: str):
     raise Exception("unsupported content source")
 
   processor = WeChatArticleProcessor(url=url)
-  processor.process()
+  processor.run()
   print("parse url success")
 
 @router.post("/content/add", response_model=BaseResponse)
