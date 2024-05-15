@@ -6,9 +6,10 @@ from app.utils import vectorstore
 from .models import ContentAddRequest, ContentItem
 from .database import add_content, update_content, retrieve_content_items, retrieve_categories
 from .chain import create_summary_chain, create_category_chain
-import re, hashlib
+import re, hashlib, logging
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 class WeChatArticleProcessor():
   def __init__(self, url: str):
@@ -21,7 +22,7 @@ class WeChatArticleProcessor():
       return browser
 
   def run(self):
-    print("Start processing...")
+    logger.info("Start processing...")
     with sync_playwright() as playwright:
       chromium = playwright.chromium
       browser = chromium.launch(headless=True)
@@ -30,7 +31,7 @@ class WeChatArticleProcessor():
       title = page.query_selector('meta[property="og:title"]').get_attribute("content")
       description = page.query_selector('meta[property="og:description"]').get_attribute("content")
       thumbnail = page.query_selector('meta[property="og:image"]').get_attribute("content")
-      print('Extract content and metadata: DONE')
+      logger.info('Extract content and metadata: DONE')
 
       # Save the metadata into db
       content_item = add_content({
@@ -39,7 +40,7 @@ class WeChatArticleProcessor():
         "description": description,
         "thumbnail": thumbnail,
       })
-      print('Save the metadata into db: DONE')
+      logger.info('Save the metadata into db: DONE')
 
       # Save the content into vector store
       content_element = page.query_selector(".rich_media_content")
@@ -51,7 +52,7 @@ class WeChatArticleProcessor():
           "content_id": content_item.id,
           "source": content_item.url
         })
-        print('Save the content into vector store: DONE.')
+        logger.info('Save the content into vector store: DONE.')
 
       # Generate useful info by LLM
       if content_item and full_text:
@@ -63,9 +64,9 @@ class WeChatArticleProcessor():
           data["ai_summary"] = response["summary"]
           data["ai_highlights"] = response["highlights"]
         except Exception as e:
-          print(f"Generate useful info by LLM error: {e}")
+          logger.error(f"Generate useful info by LLM error: {e}")
         update_content(id=content_item.id, data=data)
-        print("Generate useful info by LLM: DONE")
+        logger.info("Generate useful info by LLM: DONE")
 
       # Set proper category for the content
       if content_item:
@@ -75,7 +76,7 @@ class WeChatArticleProcessor():
     categories = retrieve_categories()
     category_chain = create_category_chain()
     target_category = category_chain.invoke({"item": item, "categories": categories})
-    print("Updating category")
+    logger.info("Updating category")
 
     def generate_category_id(name: str):
       return hashlib.sha1(name.encode()).hexdigest()
@@ -105,7 +106,7 @@ def process_content(url: str):
 
   processor = WeChatArticleProcessor(url=url)
   processor.run()
-  print("parse url success")
+  logger.info("parse url success")
 
 @router.post("/content/add", response_model=BaseResponse)
 async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks):

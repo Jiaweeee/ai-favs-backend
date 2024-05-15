@@ -2,10 +2,11 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from .apis.chat.router import router as chat_router
 from .apis.content.router import router as content_router
+import logging
 
 load_dotenv()
-
 app = FastAPI()
+logging.basicConfig(level=logging.INFO, format="%(asctime)s    %(levelname)s    %(message)s")
 
 @app.get("/")
 async def root():

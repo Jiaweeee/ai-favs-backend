@@ -3,18 +3,21 @@ from app.apis.database import database as db
 from bson.objectid import ObjectId
 from .models import ContentItem, ContentCategory
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 content_collection = db.get_collection("content_items")
 content_collection.create_index("url", unique=True)
 
 def add_content(data: dict) -> Optional[ContentItem]:
-  print('add_content')
+  logger.info('add_content')
   try:
     item = content_collection.insert_one(data)
     new_item = content_collection.find_one({"_id": item.inserted_id})
     return _to_content_item(new_item)
   except DuplicateKeyError:
-    print("A content item with the same URL already exists.")
+    logger.warning("A content item with the same URL already exists.")
     return None  
 
 def update_content(id: str, data: dict) -> bool:
