@@ -1,87 +1,60 @@
 from fastapi import APIRouter, BackgroundTasks, Query
-from playwright.sync_api import sync_playwright, Browser
 from typing import Optional
 from app.apis.models import BaseResponse
-from app.utils import vectorstore
-from .models import ContentAddRequest, ContentItem
-from .database import add_content, update_content, retrieve_content_items, retrieve_categories
+from .models import ContentAddRequest
+from .database import (
+  insert_content_item,
+  update_content_item,
+  retrieve_content_item,
+  retrieve_all_content_items,
+  retrieve_content_items_by_category,
+  retrieve_categories
+)
 from .chain import create_summary_chain, create_category_chain
+from .processors import WeChatArticleProcessor
 import re, hashlib, logging
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-class WeChatArticleProcessor():
-  def __init__(self, url: str):
-    self.url = url
-  
-  def _get_browser(self) -> Browser:
-    with sync_playwright() as playwright:
-      chromium = playwright.chromium
-      browser = chromium.launch(headless=True)
-      return browser
+def is_wechat_article(url) -> bool:
+  """
+  Check if the url is from wechat official account article.
+  """
+  pattern = r'^https?://mp\.weixin\.qq\.com/s'
+  if re.match(pattern, url):
+    return True
+  return False
 
-  def run(self):
-    logger.info("Start processing...")
-    with sync_playwright() as playwright:
-      chromium = playwright.chromium
-      browser = chromium.launch(headless=True)
-      page = browser.new_page()
-      page.goto(self.url)
-      title = page.query_selector('meta[property="og:title"]').get_attribute("content")
-      description = page.query_selector('meta[property="og:description"]').get_attribute("content")
-      thumbnail = page.query_selector('meta[property="og:image"]').get_attribute("content")
-      logger.info('Extract content and metadata: DONE')
+def generate_summary_by_ai(url: str):
+  logger.info(f"Generating summary by ai. url = {url}")
+  item = retrieve_content_item(url=url)
+  if item:
+    chain = create_summary_chain()
+    response = chain.invoke({"content": item.full_text})
+    data = {}
+    try:
+      data["ai_labels"] = response["labels"]
+      data["ai_summary"] = response["summary"]
+      data["ai_highlights"] = response["highlights"]
+      update_content_item(id=item.id, data=data)
+      logger.info("Generating summary by ai: DONE")
+    except Exception as e:
+      logger.error(f"Generate summary by ai error: {e}")
 
-      # Save the metadata into db
-      content_item = add_content({
-        "url": self.url,
-        "title": title,
-        "description": description,
-        "thumbnail": thumbnail,
-      })
-      logger.info('Save the metadata into db: DONE')
-
-      # Save the content into vector store
-      content_element = page.query_selector(".rich_media_content")
-      if content_element:
-        full_text = content_element.text_content()
-      browser.close()
-      if content_item and full_text:
-        vectorstore.save_content(full_text, metadata={
-          "content_id": content_item.id,
-          "source": content_item.url
-        })
-        logger.info('Save the content into vector store: DONE.')
-
-      # Generate useful info by LLM
-      if content_item and full_text:
-        chain = create_summary_chain()
-        response = chain.invoke({"content": full_text})
-        data = {}
-        try:
-          data["ai_labels"] = response["labels"]
-          data["ai_summary"] = response["summary"]
-          data["ai_highlights"] = response["highlights"]
-        except Exception as e:
-          logger.error(f"Generate useful info by LLM error: {e}")
-        update_content(id=content_item.id, data=data)
-        logger.info("Generate useful info by LLM: DONE")
-
-      # Set proper category for the content
-      if content_item:
-        self._update_category(item=content_item)
-    
-  def _update_category(self, item: ContentItem):
+def generate_category_by_ai(url: str):
+  logger.info(f"Generating category by ai. url = {url}")
+  item = retrieve_content_item(url=url)
+  if item:
     categories = retrieve_categories()
     category_chain = create_category_chain()
     target_category = category_chain.invoke({"item": item, "categories": categories})
-    logger.info("Updating category")
+    logger.info(f"Updating category, category = {target_category}")
 
     def generate_category_id(name: str):
       return hashlib.sha1(name.encode()).hexdigest()
 
-    update_content(item.id, {
+    update_content_item(item.id, {
       "category": {
         "id": generate_category_id(target_category["name"]),
         "name": target_category["name"],
@@ -89,36 +62,36 @@ class WeChatArticleProcessor():
       }
     })
 
-def is_wechat_article(url) -> bool:
-  """
-  Check if the url is from wechat official account article.
-  """
-  pattern = r"https://mp\.weixin\.qq\.com/s/[a-zA-Z0-9_-]+"
-  if re.match(pattern, url):
-    return True
-  return False
-
-
-def process_content(url: str):
-  if is_wechat_article(url) == False:
-    # Only support wechat article for now.
-    raise Exception("unsupported content source")
-
-  processor = WeChatArticleProcessor(url=url)
-  processor.run()
-  logger.info("parse url success")
-
 @router.post("/content/add", response_model=BaseResponse)
 async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks):
-  background_tasks.add_task(process_content, req.url)
-  return BaseResponse(
-    code=200,
-    msg='success'
-  )
+  if not is_wechat_article(req.url):
+    return BaseResponse(
+      code=500,
+      msg='Content not support.'
+    )
+  processor = WeChatArticleProcessor()
+  item = retrieve_content_item(url=req.url)
+  if item:
+    return BaseResponse(
+      code=200,
+      msg='Content already exist'
+    )
+  else:
+    data = await processor.run_async(req.url)
+    insert_content_item(data)
+    background_tasks.add_task(generate_summary_by_ai, req.url)
+    background_tasks.add_task(generate_category_by_ai, req.url)
+    return BaseResponse(
+      code=200,
+      msg='success'
+    )
 
 @router.get("/content/list/get", response_model=BaseResponse)
 async def get_content_list(category_id: Optional[str]=Query(None)):
-  items = retrieve_content_items(category_id)
+  if category_id:
+    items = retrieve_content_items_by_category(category_id)
+  else:
+    items = retrieve_all_content_items()
   return BaseResponse(
     code=200,
     msg='success',

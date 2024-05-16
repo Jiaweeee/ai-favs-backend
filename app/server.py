@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s    %(levelname)s    
 
 @app.get("/")
 async def root():
-    return "Hello"
+    return "Welcome to AIFavs"
 
 app.include_router(chat_router)
 app.include_router(content_router)
