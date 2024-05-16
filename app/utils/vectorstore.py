@@ -5,9 +5,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import VectorStore
 from langchain_core.documents import Document
 
-KNOWLEDGE_BASE_DIR = f'{os.curdir}/app/example_data/txt'
 INDEX_NAME = 'index'
-VECTOR_STORE_DIR = f'{os.curdir}/app/db'
+VECTOR_STORE_DIR = f'{os.curdir}/app/vectorestore'
 
 def _get_embeddings():
   return OpenAIEmbeddings()

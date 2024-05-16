@@ -10,6 +10,7 @@ from .database import (
   retrieve_content_items_by_category,
   retrieve_categories
 )
+from app.utils import vectorstore
 from .chain import create_summary_chain, create_category_chain
 from .processors import WeChatArticleProcessor
 import re, hashlib, logging
@@ -62,6 +63,16 @@ def generate_category_by_ai(url: str):
       }
     })
 
+def save_to_vector_store(url: str):
+  logger.info(f"Saving content to vector store. url = {url}")
+  item = retrieve_content_item(url=url)
+  if item and item.full_text:
+    vectorstore.save_content(item.full_text, metadata={
+      "content_id": item.id,
+      "source": url
+    })
+    logger.info(f"Save content to vector store, Done. url = {url}")
+
 @router.post("/content/add", response_model=BaseResponse)
 async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks):
   if not is_wechat_article(req.url):
@@ -69,18 +80,20 @@ async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks)
       code=500,
       msg='Content not support.'
     )
+  url = req.url
   processor = WeChatArticleProcessor()
-  item = retrieve_content_item(url=req.url)
+  item = retrieve_content_item(url=url)
   if item:
     return BaseResponse(
       code=200,
       msg='Content already exist'
     )
   else:
-    data = await processor.run_async(req.url)
+    data = await processor.run_async(url)
     insert_content_item(data)
-    background_tasks.add_task(generate_summary_by_ai, req.url)
-    background_tasks.add_task(generate_category_by_ai, req.url)
+    background_tasks.add_task(generate_summary_by_ai, url)
+    background_tasks.add_task(generate_category_by_ai, url)
+    background_tasks.add_task(save_to_vector_store, url)
     return BaseResponse(
       code=200,
       msg='success'
