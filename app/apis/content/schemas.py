@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from app.apis.schemas import BaseResponse
 
-class ContentAddRequest(BaseModel):
-  url: str
+class AddCollectionRequest(BaseModel):
+    url: str

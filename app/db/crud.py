@@ -1,13 +1,17 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
+from typing import List
 from . import models, schemas, database
 
 # Collection
-def get_collections(session: Session):
-    return session.query(models.Collection).all()
+def get_collections(session: Session, exclude_fields: List[str] = []):
+    options = [defer(getattr(models.Collection, field)) for field in exclude_fields]
+    return session.query(models.Collection).options(*options).all()
 
-def get_collections_by_category(category_id: str, session: Session):
+def get_collections_by_category(category_id: str, session: Session, exclude_fields: List[str] = []):
+    options = [defer(getattr(models.Collection, field)) for field in exclude_fields]
     return session.query(models.Collection) \
         .filter(models.Collection.category_id == category_id) \
+        .options(*options) \
         .all()
 
 def get_collections_by_tag(tag_id: str, session: Session):

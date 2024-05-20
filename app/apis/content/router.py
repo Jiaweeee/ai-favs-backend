@@ -1,7 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Query, Depends
 from typing import Optional
 from app.apis.schemas import BaseResponse
-from .schemas import ContentAddRequest
+from .schemas import AddCollectionRequest
 from app.utils import vectorstore
 from .chain import create_summary_chain, create_category_chain
 from .processors import WeChatArticleProcessor
@@ -86,7 +86,7 @@ def save_to_vector_store(collection_id: str, session: Session):
 
 @router.post("/content/add", response_model=BaseResponse)
 async def content_add(
-    req: ContentAddRequest,
+    req: AddCollectionRequest,
     background_tasks: BackgroundTasks,
     db: Session = Depends(database.get_db_session)
 ):
@@ -125,10 +125,11 @@ def get_content_list(
     category_id: Optional[str]=Query(None),
     db: Session = Depends(database.get_db_session)
 ):
+    exclude_fields = ["category_id", "content"]
     if category_id:
-        items = crud.get_collections_by_category(category_id, db)
+        items = crud.get_collections_by_category(category_id, db, exclude_fields)
     else:
-        items = crud.get_collections(db)
+        items = crud.get_collections(db, exclude_fields)
     return BaseResponse(
         code=200,
         msg='success',
