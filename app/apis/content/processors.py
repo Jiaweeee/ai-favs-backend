@@ -35,6 +35,6 @@ class WeChatArticleProcessor(BaseProcessor):
         "url": url,
         "title": title,
         "description": description,
-        "thumbnail": thumbnail,
-        "full_text": full_text
+        "thumbnail_url": thumbnail,
+        "content": full_text
       }

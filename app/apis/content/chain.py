@@ -11,9 +11,7 @@ def create_summary_chain():
   content: {content} \
 
   The result you return should be in json format that includes the following keys: \
-  - labels: A list of no more than 5 keywords that are most closely related to the content. \
-  - summary: A string of summary of the content. \
-  - highlights: A list of the main points highlighted in the content. \
+  - tags: A list of less than 5 keywords that are most closely related to the content. \
   """
   prompt = PromptTemplate(
     template=prompt_template,
@@ -31,7 +29,8 @@ def create_category_chain():
   put it into a category that best fit its content. \
   If you think the article does not fit into any of the existing categories, \
   or you think the article should be put into a more relevant category,
-  you should create a new category with an appropriate name and description. \
+  you should create a new category with an appropriate name and description based on the article's content. \
+  Please note that even if the existing categories list is empty, you should still create a relevant category based on the article's content. \
   Article info: {item}
   Existing categories in my knowledge base: {categories}
 

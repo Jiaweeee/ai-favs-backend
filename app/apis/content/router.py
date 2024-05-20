@@ -1,114 +1,138 @@
-from fastapi import APIRouter, BackgroundTasks, Query
+from fastapi import APIRouter, BackgroundTasks, Query, Depends
 from typing import Optional
-from app.apis.models import BaseResponse
-from .models import ContentAddRequest
-from .database import (
-  insert_content_item,
-  update_content_item,
-  retrieve_content_item,
-  retrieve_all_content_items,
-  retrieve_content_items_by_category,
-  retrieve_categories
-)
+from app.apis.schemas import BaseResponse
+from .schemas import ContentAddRequest
 from app.utils import vectorstore
 from .chain import create_summary_chain, create_category_chain
 from .processors import WeChatArticleProcessor
-import re, hashlib, logging
+import re, logging
+from app.db import crud, database, schemas, models
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 def is_wechat_article(url) -> bool:
-  """
-  Check if the url is from wechat official account article.
-  """
-  pattern = r'^https?://mp\.weixin\.qq\.com/s'
-  if re.match(pattern, url):
-    return True
-  return False
+    """
+    Check if the url is from wechat official account article.
+    """
+    pattern = r'^https?://mp\.weixin\.qq\.com/s'
+    if re.match(pattern, url):
+        return True
+    return False
 
-def generate_summary_by_ai(url: str):
-  logger.info(f"Generating summary by ai. url = {url}")
-  item = retrieve_content_item(url=url)
-  if item:
-    chain = create_summary_chain()
-    response = chain.invoke({"content": item.full_text})
-    data = {}
+def generate_category(collection_id: str, session: Session):
+    logger.info("generate_category")
+    collection = crud.get_collection_by_id(id_=collection_id, session=session)
+    if not collection:
+        raise ValueError("Collection not found.")
+    chain = create_category_chain()
+    categories = crud.get_catetories(session=session)
+    if not categories:
+        categories = []
+    item = {
+        "title": collection.title,
+        "description": collection.description,
+        "content": collection.content
+    }
+    response = chain.invoke({"item": item, "categories": []})
     try:
-      data["ai_labels"] = response["labels"]
-      data["ai_summary"] = response["summary"]
-      data["ai_highlights"] = response["highlights"]
-      update_content_item(id=item.id, data=data)
-      logger.info("Generating summary by ai: DONE")
+        category_name = response["name"]
+        category_desc = response["description"]
+        category = session.query(models.Category).filter(models.Category.name == category_name).first()
+        if not category:
+            category = models.Category(name=category_name, description=category_desc).save(session=session)
+        collection.category_id = category.id
+        session.commit()
+        logger.info(f"generate_category done. category = {category_name}")
     except Exception as e:
-      logger.error(f"Generate summary by ai error: {e}")
+        logger.error(f"generate_category failed, error: {e}")
 
-def generate_category_by_ai(url: str):
-  logger.info(f"Generating category by ai. url = {url}")
-  item = retrieve_content_item(url=url)
-  if item:
-    categories = retrieve_categories()
-    category_chain = create_category_chain()
-    target_category = category_chain.invoke({"item": item, "categories": categories})
-    logger.info(f"Updating category, category = {target_category}")
+def generate_tags(collection_id: str, session: Session):
+    logger.info("generate_tags")
+    collection = crud.get_collection_by_id(id_=collection_id, session=session)
+    if not collection:
+        raise ValueError("Collection not found.")
+    chain = create_summary_chain()
+    response = chain.invoke({"content": collection.content})
+    try:
+        tag_names = response.get("tags", None)
+        if not tag_names:
+            return
+        tags = []
+        for name in tag_names:
+            tag = session.query(models.Tag).filter(models.Tag.name == name).first()
+            if not tag:
+                tag = models.Tag(name=name)
+                session.add(tag)
+            tags.append(tag)
+        collection.tags.extend(tags)
+        session.commit()
+        logger.info(f"generate_tags, done. tags = {tag_names}")
+    except Exception as e:
+        logger.error(f"generate_tags failed, error: {e}")
 
-    def generate_category_id(name: str):
-      return hashlib.sha1(name.encode()).hexdigest()
-
-    update_content_item(item.id, {
-      "category": {
-        "id": generate_category_id(target_category["name"]),
-        "name": target_category["name"],
-        "description": target_category["description"]
-      }
-    })
-
-def save_to_vector_store(url: str):
-  logger.info(f"Saving content to vector store. url = {url}")
-  item = retrieve_content_item(url=url)
-  if item and item.full_text:
-    vectorstore.save_content(item.full_text, metadata={
-      "content_id": item.id,
-      "source": url
-    })
-    logger.info(f"Save content to vector store, Done. url = {url}")
+def save_to_vector_store(collection_id: str, session: Session):
+    collection = crud.get_collection_by_id(id_=collection_id, session=session)
+    if not collection:
+        raise ValueError("Collection not found.")
+    if collection.content:
+        logger.info(f"Saving content to vector store. url = {collection.url}")
+        vectorstore.save_content(collection.content, metadata={
+            "content_id": collection.id,
+            "source": collection.url
+        })
+        logger.info(f"Save content to vector store, Done. url = {collection.url}")
 
 @router.post("/content/add", response_model=BaseResponse)
-async def content_add(req: ContentAddRequest, background_tasks: BackgroundTasks):
-  if not is_wechat_article(req.url):
-    return BaseResponse(
-      code=500,
-      msg='Content not support.'
+async def content_add(
+    req: ContentAddRequest,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(database.get_db_session)
+):
+    if not is_wechat_article(req.url):
+        return BaseResponse(
+            code=500,
+            msg='Content not support.'
+        )
+    url = req.url
+    processor = WeChatArticleProcessor()
+    item = crud.get_collection_by_url(
+        url=url,
+        session=db
     )
-  url = req.url
-  processor = WeChatArticleProcessor()
-  item = retrieve_content_item(url=url)
-  if item:
-    return BaseResponse(
-      code=200,
-      msg='Content already exist'
-    )
-  else:
-    data = await processor.run_async(url)
-    insert_content_item(data)
-    background_tasks.add_task(generate_summary_by_ai, url)
-    background_tasks.add_task(generate_category_by_ai, url)
-    background_tasks.add_task(save_to_vector_store, url)
-    return BaseResponse(
-      code=200,
-      msg='success'
-    )
+    if item:
+        return BaseResponse(
+            code=200,
+            msg='Content already exist'
+        )
+    else:
+        data = await processor.run_async(url)
+        new_collection = crud.create_collection(
+            data=schemas.CollectionCreate(**data),
+            session=db
+        )
+        background_tasks.add_task(generate_tags, new_collection.id, db)
+        background_tasks.add_task(generate_category, new_collection.id, db)
+        background_tasks.add_task(save_to_vector_store, new_collection.id, db)
+        return BaseResponse(
+            code=200,
+            msg='success'
+        )
 
 @router.get("/content/list/get", response_model=BaseResponse)
-async def get_content_list(category_id: Optional[str]=Query(None)):
-  if category_id:
-    items = retrieve_content_items_by_category(category_id)
-  else:
-    items = retrieve_all_content_items()
-  return BaseResponse(
-    code=200,
-    msg='success',
-    data=items
-  )
+def get_content_list(
+    category_id: Optional[str]=Query(None),
+    db: Session = Depends(database.get_db_session)
+):
+    if category_id:
+        items = crud.get_collections_by_category(category_id, db)
+    else:
+        items = crud.get_collections(db)
+    return BaseResponse(
+        code=200,
+        msg='success',
+        data=items
+    )
 
 __all__ = ["router"]

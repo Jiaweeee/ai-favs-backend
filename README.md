@@ -52,3 +52,9 @@ python demo/chat.py
 ![](./img/run_chat_locally.png)
 
 然后输入问题即可，输入 quit 退出
+
+## 4. Docker 部署
+build image
+```
+docker build -t ai-favs .
+```

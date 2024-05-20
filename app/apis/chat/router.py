@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from app.apis.chat.chain import create_rag_chain, create_follow_ups_chain
-from app.apis.models import BaseResponse
+from app.apis.schemas import BaseResponse
 from .models import ChatRequest, ChatResponse
 
 router = APIRouter()
 
 @router.post("/chat", response_model=BaseResponse)
-async def chat(req: ChatRequest):
+def chat(req: ChatRequest):
   rag_chain = create_rag_chain()
   response = rag_chain.invoke({
     "input": req.input,
@@ -29,7 +29,7 @@ async def chat(req: ChatRequest):
   )
 
 @router.post("/chat/stream")
-async def chat_stream(req: ChatRequest):
+def chat_stream(req: ChatRequest):
   rag_chain = create_rag_chain()
   return rag_chain.stream({
     "input": req.input,
@@ -37,7 +37,7 @@ async def chat_stream(req: ChatRequest):
   })
 
 @router.get("/chat/followups/get", response_model=BaseResponse)
-async def chat_followups_get(req: ChatRequest):
+def chat_followups_get(req: ChatRequest):
   follow_ups_chain = create_follow_ups_chain()
   response = follow_ups_chain.invoke({
     "input": req.input,

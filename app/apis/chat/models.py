@@ -11,6 +11,3 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
   content: str
   sources: Optional[List[str]] = None
-
-class ChatFollowUps(BaseModel):
-  follow_ups: List[str] = Field(default=[], description="A list of no more than 5 potential follow-up questions that could continue the conversation.")

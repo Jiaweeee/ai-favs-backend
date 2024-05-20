@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from .apis.chat.router import router as chat_router
 from .apis.content.router import router as content_router
+from .db import models, database
 import logging
 
+models.Base.metadata.create_all(bind=database.engine)
 load_dotenv()
 app = FastAPI()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s    %(levelname)s    %(message)s")
