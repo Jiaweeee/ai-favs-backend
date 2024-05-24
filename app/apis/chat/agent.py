@@ -1,55 +1,50 @@
 from app.utils.llm import get_llm
-from app.utils.vectorstore import load_vector_store
 from langchain.agents import create_openai_tools_agent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.agents import AgentExecutor
-from langchain_community.tools.tavily_search import TavilySearchResults
-from langchain.tools.retriever import create_retriever_tool
 from pydantic import BaseModel
+from typing import Literal, Dict
+from .tools import *
 import json
 
-class Event(BaseModel):
-    name: str
-    msg: str
+EventType = Literal[
+    "start",
+    "tool_start",
+    "tool_end",
+    "llm_streaming",
+    "end"
+]
+
+event_map: Dict[str, EventType] = {
+    "on_chain_start": "start",
+    "on_tool_start": "tool_start",
+    "on_chat_model_stream": "llm_streaming",
+    "on_tool_end": "tool_end",
+    "on_chain_end": "end"
+}
+
+class AgentStreamEvent(BaseModel):
+    event: EventType
+
+class ToolUseEvent(AgentStreamEvent):
+    tool_name: str
+    tool_description: str
+
+class LLMStreamingEvent(AgentStreamEvent):
+    event: EventType = "llm_streaming"
+    content: str
 
 class QuestionAnswerAgent:
     def __init__(self) -> None:
         self.prompt = """
-        - Role: Knowledge Base Assistant
-
-        - Background: AiFavs is a read-it-later app similar to Pocket. \
-        It allows user save contents on the internet to a local knowledge base \
-        and interact with it later. It has a built-in AI assistant which aims to \
-        help the user better understand the saved content.
-
-        - Profile: You are an AI Agent designed to efficiently retrieve and synthesize \
-        information from a local vector database and the internet to answer user queries.
-
-        - Skills: Vector database querying, internet search, information synthesis, \
-        natural language understanding.
-
-        - Goals: To provide accurate and relevant answers to user queries by first \
-        searching the local knowledge base and then, if needed, using the internet search tool.
-
-        - Constraints: Ensure the response is accurate, relevant, and synthesized \
-        from the most reliable sources available.
-        - OutputFormat: Textual response that directly addresses the user's query.
+        You are a helpful assistant. There's a local knowledge base that you can access. \
+        If you not sure about the answer of a user query, you should ALWAYS search the local \
+        knowledge base for context. If nothing relavent found, then search on the internet.
         """
         self.tools = [
-            self._web_search(),
-            self._vector_store_search()
+            WebSearch().get(),
+            VectorStoreSearch().get()
         ]
-
-    def _web_search(self):
-        return TavilySearchResults(max_results=5)
-    
-    def _vector_store_search(self):
-        vector_store = load_vector_store()
-        return create_retriever_tool(
-            vector_store.as_retriever(),
-            name="knowledge_base_search",
-            description="Search for relevant content in the local vector database"
-        )
 
     def _get_executor(self) -> AgentExecutor:
         llm = get_llm()
@@ -81,40 +76,34 @@ class QuestionAnswerAgent:
                 return obj.__dict__
             else:
                 return str(obj)
+        
         async for event in agent_executor.astream_events(
             {"input": query, "chat_history": chat_history},
             version="v1"
         ):
             kind = event["event"]
-            response: Event
+            result: AgentStreamEvent
             if kind == "on_chain_start":
                 if event["name"] == "Agent":
-                    response = Event(
-                        name="start",
-                        msg=f"Starting agent: {event['name']} with input: {event['data'].get('input')}"
-                    )
+                    result = AgentStreamEvent(event="start")
             elif kind == "on_chain_end":
                 if event["name"] == "Agent":
-                    response = Event(
-                        name="end",
-                        msg=f"Done agent: {event['name']} with output: {event['data'].get('output')['output']}"
-                    )
+                    result = AgentStreamEvent(event="end")
             elif kind == "on_chat_model_stream":
                 content = event["data"]["chunk"].content
                 if content:
-                    response = Event(
-                        name="answering",
-                        msg=content
-                    )
+                    result = LLMStreamingEvent(content=content)
             elif kind == "on_tool_start":
-                response = Event(
-                    name="use_tool_start",
-                    msg=f"Starting tool: {event['name']} with inputs: {event['data'].get('input')}"
+                result = ToolUseEvent(
+                    event="tool_start",
+                    tool_name=event["name"],
+                    tool_description=""
                 )
             elif kind == "on_tool_end":
-                response = Event(
-                    name="use_tool_end",
-                    msg=f"Done tool: {event['name']}\nTool output was: {event['data'].get('output')}"
+                result = ToolUseEvent(
+                    event="tool_end",
+                    tool_name=event["name"],
+                    tool_description=""
                 )
-            yield json.dumps(response, default=custom_serializer) + "\n"
+            yield json.dumps(result, default=custom_serializer) + "\n"
 

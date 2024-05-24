@@ -11,58 +11,58 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-RESPONSE_TEMPLATE = """
-You are an assistant for question-answering tasks. \
-Use the following pieces of retrieved context to answer the question. \
-If you don't know the answer, just say that you don't know. \
-{context}
-"""
+# RESPONSE_TEMPLATE = """
+# You are an assistant for question-answering tasks. \
+# Use the following pieces of retrieved context to answer the question. \
+# If you don't know the answer, just say that you don't know. \
+# {context}
+# """
 
-REPHRASE_PROMPT = """
-Given a chat history and the latest user question \
-which might reference context in the chat history, formulate a standalone question \
-which can be understood without the chat history. Do NOT answer the question, \
-just reformulate it if needed and otherwise return it as is.
-"""
+# REPHRASE_PROMPT = """
+# Given a chat history and the latest user question \
+# which might reference context in the chat history, formulate a standalone question \
+# which can be understood without the chat history. Do NOT answer the question, \
+# just reformulate it if needed and otherwise return it as is.
+# """
 
-def get_retriever() -> BaseRetriever:
-  vector_store = load_vector_store()
-  logger.info("Load vectore store: DONE")
-  return vector_store.as_retriever()
+# def get_retriever() -> BaseRetriever:
+#   vector_store = load_vector_store()
+#   logger.info("Load vectore store: DONE")
+#   return vector_store.as_retriever()
 
-def create_chat_history_aware_retriever(llm: LanguageModelLike):
-  """
-  This is a chat history aware retriever.
-  """
-  history_aware_prompt = ChatPromptTemplate.from_messages([
-     ("system", REPHRASE_PROMPT),
-     (MessagesPlaceholder("chat_history")),
-     ("human", "{input}")
-  ])
-  return create_history_aware_retriever(
-     llm=llm,
-     prompt=history_aware_prompt,
-     retriever=get_retriever()
-  )
+# def create_chat_history_aware_retriever(llm: LanguageModelLike):
+#   """
+#   This is a chat history aware retriever.
+#   """
+#   history_aware_prompt = ChatPromptTemplate.from_messages([
+#      ("system", REPHRASE_PROMPT),
+#      (MessagesPlaceholder("chat_history")),
+#      ("human", "{input}")
+#   ])
+#   return create_history_aware_retriever(
+#      llm=llm,
+#      prompt=history_aware_prompt,
+#      retriever=get_retriever()
+#   )
 
-def create_rag_chain() -> Runnable:
-  llm = get_llm()
-  retriever = create_chat_history_aware_retriever(llm)
-  qa_prompt = ChatPromptTemplate.from_messages([
-    ("system", RESPONSE_TEMPLATE),
-    MessagesPlaceholder("chat_history"),
-    ("human", "{input}")
-  ])
+# def create_rag_chain() -> Runnable:
+#   llm = get_llm()
+#   retriever = create_chat_history_aware_retriever(llm)
+#   qa_prompt = ChatPromptTemplate.from_messages([
+#     ("system", RESPONSE_TEMPLATE),
+#     MessagesPlaceholder("chat_history"),
+#     ("human", "{input}")
+#   ])
   
-  qa_chain = create_stuff_documents_chain(
-    llm=llm,
-    prompt=qa_prompt
-  )
-  rag_chain = RunnablePassthrough.assign(
-    context=retriever
-  ).assign(answer=qa_chain)
+#   qa_chain = create_stuff_documents_chain(
+#     llm=llm,
+#     prompt=qa_prompt
+#   )
+#   rag_chain = RunnablePassthrough.assign(
+#     context=retriever
+#   ).assign(answer=qa_chain)
 
-  return rag_chain
+#   return rag_chain
 
 def create_follow_ups_chain() -> Runnable:
   system_prompt = """

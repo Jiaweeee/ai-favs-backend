@@ -14,7 +14,10 @@ def _get_embeddings():
 def load_vector_store() -> VectorStore:
   index_file_path = f"{VECTOR_STORE_DIR}/{INDEX_NAME}.faiss"
   if os.path.exists(index_file_path) == False:
-    raise Exception("vector store not found.")
+    FAISS.from_texts(
+      texts=["text"],
+      embedding=_get_embeddings()
+    ).save_local(folder_path=VECTOR_STORE_DIR, index_name=INDEX_NAME)
   return FAISS.load_local(
     folder_path=VECTOR_STORE_DIR,
     index_name=INDEX_NAME,

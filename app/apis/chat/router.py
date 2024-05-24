@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from app.apis.chat.chain import create_follow_ups_chain
 from app.apis.schemas import BaseResponse
-from .models import ChatRequest
+from .schemas import ChatRequest
 from .agent import *
 
 router = APIRouter()
