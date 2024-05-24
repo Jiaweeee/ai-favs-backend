@@ -123,11 +123,14 @@ async def content_add(
 @router.get("/content/list/get", response_model=BaseResponse)
 def get_content_list(
     category_id: Optional[str]=Query(None),
+    tag_id: Optional[str]=Query(None),
     db: Session = Depends(database.get_db_session)
 ):
     exclude_fields = ["category_id", "content"]
     if category_id:
         items = crud.get_collections_by_category(category_id, db, exclude_fields)
+    elif tag_id:
+        items = crud.get_collections_by_tag(tag_id, db, exclude_fields)
     else:
         items = crud.get_collections(db, exclude_fields)
     return BaseResponse(

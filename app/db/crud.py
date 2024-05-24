@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session, defer
+from sqlalchemy.orm import Session, defer, joinedload
 from typing import List
-from . import models, schemas, database
+from . import models, schemas
 
 # Collection
 def get_collections(session: Session, exclude_fields: List[str] = []):
@@ -14,11 +14,17 @@ def get_collections_by_category(category_id: str, session: Session, exclude_fiel
         .options(*options) \
         .all()
 
-def get_collections_by_tag(tag_id: str, session: Session):
-    tag = session.query(models.Tag) \
+def get_collections_by_tag(tag_id: str, session: Session, exclude_fields: List[str] = []):
+    field_defer_option = [defer(getattr(models.Collection, field)) for field in exclude_fields]
+    collections = session.query(models.Collection) \
+        .join(models.Collection.tags) \
         .filter(models.Tag.id == tag_id) \
-        .first()
-    return tag.collections
+        .options(
+            joinedload(models.Collection.tags),
+            *field_defer_option
+        ) \
+        .all()
+    return collections
 
 def get_collection_by_id(id_: str, session: Session):
     return models.Collection.get(session=session, id_=id_)
