@@ -139,4 +139,72 @@ def get_content_list(
         data=items
     )
 
+@router.get("/category/list/get", response_model=BaseResponse)
+def get_categories(db: Session = Depends(database.get_db_session)):
+    db_categories = crud.get_catetories(db)
+    result = [
+        {
+            "id": category.id,
+            "name": category.name,
+            "description": category.description,
+            "collection_count": len(category.collections)
+        }
+        for category in db_categories
+    ]
+    return BaseResponse(
+        code=200,
+        msg="success",
+        data=result
+    )
+
+@router.get("/tag/list/get")
+def get_tags(db: Session = Depends(database.get_db_session)):
+    db_tags = crud.get_tags(db)
+    result = [
+        {
+            "id": tag.id,
+            "name": tag.name,
+            "collection_count": len(tag.collections)
+        }
+        for tag in db_tags
+    ]
+    return BaseResponse(
+        code=200,
+        msg="success",
+        data=result
+    )
+
+@router.get("/collection/overview")
+def get_collection_overview(db: Session = Depends(database.get_db_session)):
+    # get categories
+    db_categories = crud.get_catetories(db)
+    categories = [
+        {
+            "id": category.id,
+            "name": category.name,
+            "description": category.description,
+            "collection_count": len(category.collections)
+        }
+        for category in db_categories
+    ]
+    # get tags
+    db_tags = crud.get_tags(db)
+    tags = [
+        {
+            "id": tag.id,
+            "name": tag.name,
+            "collection_count": len(tag.collections)
+        }
+        for tag in db_tags
+    ]
+    return BaseResponse(
+        code=200,
+        msg="success",
+        data={
+            "categories": categories,
+            "tags": tags
+        }
+    )
+    pass
+
 __all__ = ["router"]

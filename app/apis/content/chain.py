@@ -39,6 +39,7 @@ def create_category_chain():
   - "name": the category name \
   - "description": the category description. \
   
+  Remember: the category name should be accurate and concise and short. Use a single word, two tops.
   You should only return the JSON object, nothing else.
   """
   prompt = PromptTemplate(

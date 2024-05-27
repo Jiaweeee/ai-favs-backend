@@ -57,9 +57,14 @@ def update_collection(
     return db_collection
 
 # Tag
-def create_tags():
-    pass
+def get_tags(session: Session):
+    return session.query(models.Tag) \
+        .options(joinedload(models.Tag.collections)) \
+        .all()
+
 
 # Category
 def get_catetories(session: Session):
-    return session.query(models.Category).all()
+    return session.query(models.Category) \
+        .options(joinedload(models.Category.collections)) \
+        .all()
