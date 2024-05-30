@@ -34,6 +34,10 @@ class LLMStreamingEvent(AgentStreamEvent):
     event: EventType = "llm_streaming"
     content: str
 
+class StreamEndEvent(AgentStreamEvent):
+    event: EventType = "end"
+    output: str
+    
 class QuestionAnswerAgent:
     def __init__(self) -> None:
         self.prompt = """
@@ -88,7 +92,7 @@ class QuestionAnswerAgent:
                     result = AgentStreamEvent(event="start")
             elif kind == "on_chain_end":
                 if event["name"] == "Agent":
-                    result = AgentStreamEvent(event="end")
+                    result = StreamEndEvent(output=event["data"]["output"]["output"])
             elif kind == "on_chat_model_stream":
                 content = event["data"]["chunk"].content
                 if content:
@@ -105,5 +109,6 @@ class QuestionAnswerAgent:
                     tool_name=event["name"],
                     tool_description=""
                 )
-            yield json.dumps(result, default=custom_serializer) + "\n"
+            data = json.dumps(result, default=custom_serializer)
+            yield f"data: {data}\n\n"
 
