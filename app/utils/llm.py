@@ -3,7 +3,7 @@ from langchain_community.llms.moonshot import Moonshot
 
 def _openai(streaming: bool):
   return ChatOpenAI(
-    model="gpt-3.5-turbo-16k",
+    model="gpt-4o",
     temperature=0,
     streaming=streaming
   )
