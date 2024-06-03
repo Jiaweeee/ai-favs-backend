@@ -1,4 +1,4 @@
-from app.utils.llm import get_llm
+import app.utils.llm as LLM
 from langchain.agents import create_openai_tools_agent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.agents import AgentExecutor
@@ -51,7 +51,7 @@ class QuestionAnswerAgent:
         ]
 
     def _get_executor(self) -> AgentExecutor:
-        llm = get_llm()
+        llm = LLM.get_tool_calling_model()
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", self.prompt),

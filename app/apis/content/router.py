@@ -2,8 +2,7 @@ from fastapi import APIRouter, BackgroundTasks, Query, Depends
 from typing import Optional
 from app.apis.schemas import BaseResponse
 from .schemas import AddCollectionRequest
-from app.utils import vectorstore
-from .chain import create_summary_chain, create_category_chain
+from app.utils import vectorstore, tools as Tools
 from .processors import WeChatArticleProcessor
 import re, logging
 from app.db import crud, database, schemas, models
@@ -21,21 +20,17 @@ def is_wechat_article(url) -> bool:
         return True
     return False
 
-def generate_category(collection_id: str, session: Session):
-    logger.info("generate_category")
+def generate_and_save_category(collection_id: str, session: Session):
+    logger.info("generate_and_save_category")
     collection = crud.get_collection_by_id(id_=collection_id, session=session)
     if not collection:
         raise ValueError("Collection not found.")
-    chain = create_category_chain()
     categories = crud.get_catetories(session=session)
     if not categories:
-        categories = []
-    item = {
-        "title": collection.title,
-        "description": collection.description,
-        "content": collection.content
-    }
-    response = chain.invoke({"item": item, "categories": []})
+        category_names = []
+    else:
+        category_names = list(map(lambda x: x.name, categories))
+    response = Tools.classification_tool(collection.content, category_names)
     try:
         category_name = response["name"]
         category_desc = response["description"]
@@ -48,13 +43,12 @@ def generate_category(collection_id: str, session: Session):
     except Exception as e:
         logger.error(f"generate_category failed, error: {e}")
 
-def generate_tags(collection_id: str, session: Session):
-    logger.info("generate_tags")
+def generate_and_save_tags(collection_id: str, session: Session):
+    logger.info("generate_and_save_tags")
     collection = crud.get_collection_by_id(id_=collection_id, session=session)
     if not collection:
         raise ValueError("Collection not found.")
-    chain = create_summary_chain()
-    response = chain.invoke({"content": collection.content})
+    response = Tools.tagging_tool(collection.content)
     try:
         tag_names = response.get("tags", None)
         if not tag_names:
@@ -71,6 +65,17 @@ def generate_tags(collection_id: str, session: Session):
         logger.info(f"generate_tags, done. tags = {tag_names}")
     except Exception as e:
         logger.error(f"generate_tags failed, error: {e}")
+
+def generate_and_save_summary(collection_id: str, session: Session):
+    logger.info("generate_and_save_summary")
+    collection = crud.get_collection_by_id(id_=collection_id, session=session)
+    if not collection:
+        raise ValueError("Collection not found.")
+    summary = Tools.summary_tool(collection.content)
+    if summary:
+        collection.summary = summary
+        session.commit()
+    logger.info(f"summary = {summary}")
 
 def save_to_vector_store(collection_id: str, session: Session):
     collection = crud.get_collection_by_id(id_=collection_id, session=session)
@@ -112,8 +117,9 @@ async def content_add(
             data=schemas.CollectionCreate(**data),
             session=db
         )
-        background_tasks.add_task(generate_tags, new_collection.id, db)
-        background_tasks.add_task(generate_category, new_collection.id, db)
+        background_tasks.add_task(generate_and_save_tags, new_collection.id, db)
+        background_tasks.add_task(generate_and_save_summary, new_collection.id, db)
+        background_tasks.add_task(generate_and_save_category, new_collection.id, db)
         background_tasks.add_task(save_to_vector_store, new_collection.id, db)
         return BaseResponse(
             code=200,
