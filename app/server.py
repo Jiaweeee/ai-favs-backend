@@ -11,13 +11,21 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s    %(levelname)s    %(message)s")
 logger = logging.getLogger(__file__)
 
-models.Base.metadata.create_all(bind=database.engine)
 app = FastAPI()
 
 # create audio dir
 audio_dir = "app/public/audio"
 os.makedirs(audio_dir, exist_ok=True)
 app.mount("/audio", StaticFiles(directory=audio_dir), name="audio")
+
+# init database
+db_dir = "app/db/files"
+os.makedirs(db_dir, exist_ok=True)
+models.Base.metadata.create_all(bind=database.engine)
+
+# init vector store
+vector_store_dir = "app/vectorestore"
+os.makedirs(vector_store_dir, exist_ok=True)
 
 # include routers
 app.include_router(chat_router)
