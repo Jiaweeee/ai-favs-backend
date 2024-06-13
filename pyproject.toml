@@ -25,6 +25,8 @@ langchain-core = "^0.1.50"
 langchain = "^0.1.17"
 playwright = "^1.43.0"
 sqlalchemy = "^2.0.30"
+pydub = "^0.25.1"
+alembic = "^1.13.1"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Query, Depends
 from typing import Optional
 from app.apis.schemas import BaseResponse
-from .schemas import AddCollectionRequest
+from .schemas import AddCollectionBody, DeleteCollectionBody
 from app.utils import vectorstore, tools as Tools
 from .processors import WeChatArticleProcessor
 import re, logging
@@ -91,16 +91,16 @@ def save_to_vector_store(collection_id: str, session: Session):
 
 @router.post("/content/add", response_model=BaseResponse)
 async def content_add(
-    req: AddCollectionRequest,
+    body: AddCollectionBody,
     background_tasks: BackgroundTasks,
     db: Session = Depends(database.get_db_session)
 ):
-    if not is_wechat_article(req.url):
+    if not is_wechat_article(body.url):
         return BaseResponse(
             code=500,
             msg='Content not support.'
         )
-    url = req.url
+    url = body.url
     processor = WeChatArticleProcessor()
     item = crud.get_collection_by_url(
         url=url,
@@ -176,6 +176,23 @@ def get_collection_overview(db: Session = Depends(database.get_db_session)):
             "tags": tags
         }
     )
-    pass
+
+@router.post("/collection/delete", response_model=BaseResponse)
+async def collection_delete(
+    body: DeleteCollectionBody,
+    db_session: Session = Depends(database.get_db_session)
+):
+    collection_id = body.collection_id
+    collection = models.Collection.get(
+        session=db_session,
+        id_=collection_id
+    )
+    if collection:
+        collection.delete(db_session)
+    return BaseResponse(
+        code=200,
+        msg="success"
+    )
+
 
 __all__ = ["router"]

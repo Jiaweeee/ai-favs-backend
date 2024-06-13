@@ -24,9 +24,15 @@ def summary_tool(text: str):
     return chain.invoke({"input": text})
 
 def rewrite_tool(text: str, instruction: str):
-    """"""
-    # TODO
-    return text
+    """Rewrites the given text according to the instruction"""
+    llm = LLM.get_simple_model(long_context=len(text) > 8192)
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Rewrite the following text according to the given instruction."),
+        ("user", "Instruction: {instruction}"),
+        ("user", "Text: {text}")
+    ])
+    chain = prompt | llm | StrOutputParser()
+    return chain.invoke({"text": text, "instruction": instruction})
 
 
 def tagging_tool(text: str):
@@ -57,7 +63,8 @@ def classification_tool(text: str, category_names: List[str] = []):
     )
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Classify the following text into one of the provided categories. \
-            If the text does not fit any existing category, create a new category"),
+            If the text does not fit any existing category, create a new category. \
+            The category name you returned should be consice and tidy, with no more than 3 words."),
         ("user", "content: {input}"),
         ("user", "categories: {categories}")
     ])

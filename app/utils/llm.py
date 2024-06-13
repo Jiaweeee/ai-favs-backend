@@ -15,12 +15,15 @@ class MoonshotModelName(str, enum.Enum):
     MOONSHOT_V1_32K = "moonshot-v1-32k"
     MOONSHOT_V1_128K = "moonshot-v1-128k"
 
-def get_tool_calling_model():
+def get_tool_calling_model(streaming: bool = False):
     """
     The returned model is capable of handling complex tasks, like function calling
     or output structured data.
     """
-    return ChatOpenAI(model=OpenAIModelName.GPT4_O)
+    return ChatOpenAI(
+        model=OpenAIModelName.GPT4_O,
+        streaming=streaming
+    )
 
 def get_simple_model(long_context: bool = False):
     """

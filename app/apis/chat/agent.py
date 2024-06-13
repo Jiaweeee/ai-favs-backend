@@ -51,7 +51,7 @@ class QuestionAnswerAgent:
         ]
 
     def _get_executor(self) -> AgentExecutor:
-        llm = LLM.get_tool_calling_model()
+        llm = LLM.get_tool_calling_model(streaming=True)
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", self.prompt),

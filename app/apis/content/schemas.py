@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from app.apis.schemas import BaseResponse
 
-class AddCollectionRequest(BaseModel):
+class AddCollectionBody(BaseModel):
     url: str
+
+class DeleteCollectionBody(BaseModel):
+    collection_id: str

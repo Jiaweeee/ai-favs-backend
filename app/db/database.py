@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-SQLITE_DATABASE_URL = os.environ["SQLITE_DATABASE_URL"]
+SQL_DATABASE_URL = os.environ["SQL_DATABASE_URL"]
 
 engine = create_engine(
-    SQLITE_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQL_DATABASE_URL
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
