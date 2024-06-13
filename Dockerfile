@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y --fix-missing wget\
         libxkbcommon0\
         libpango-1.0-0\
         libcairo2\
-        libasound2
+        libasound2\
+        ffmpeg
 
 RUN pip install poetry==1.6.1
 
