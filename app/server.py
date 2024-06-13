@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from .apis.chat.router import router as chat_router
-from .apis.content.router import router as content_router
+from .apis.collection.router import router as collection_router
 from .apis.podcast.router import router as podcast_router
 from .db import models, database
 import logging, os
@@ -29,7 +29,7 @@ os.makedirs(vector_store_dir, exist_ok=True)
 
 # include routers
 app.include_router(chat_router)
-app.include_router(content_router)
+app.include_router(collection_router)
 app.include_router(podcast_router)
 
 @app.get("/")

@@ -89,8 +89,8 @@ def save_to_vector_store(collection_id: str, session: Session):
         })
         logger.info(f"Save content to vector store, Done. url = {collection.url}")
 
-@router.post("/content/add", response_model=BaseResponse)
-async def content_add(
+@router.post("/collection/add", response_model=BaseResponse)
+async def add_collection(
     body: AddCollectionBody,
     background_tasks: BackgroundTasks,
     db: Session = Depends(database.get_db_session)
@@ -126,8 +126,8 @@ async def content_add(
             msg='success'
         )
 
-@router.get("/content/list/get", response_model=BaseResponse)
-def get_content_list(
+@router.get("/collection/list/get", response_model=BaseResponse)
+def get_collection_list(
     category_id: Optional[str]=Query(None),
     tag_id: Optional[str]=Query(None),
     db: Session = Depends(database.get_db_session)
@@ -178,7 +178,7 @@ def get_collection_overview(db: Session = Depends(database.get_db_session)):
     )
 
 @router.post("/collection/delete", response_model=BaseResponse)
-async def collection_delete(
+async def delete_collection(
     body: DeleteCollectionBody,
     db_session: Session = Depends(database.get_db_session)
 ):
