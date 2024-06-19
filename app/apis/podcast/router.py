@@ -43,6 +43,8 @@ async def create_podcast(
         status = collection.podcast.status
         if status == models.PodcastStatus.ERROR.value:
             podcast = collection.podcast
+            podcast.status = models.PodcastStatus.GENERATING.value
+            podcast.save(db_session)
         elif status == models.PodcastStatus.GENERATING.value:
             return BaseResponse(
                 code=200,
