@@ -66,6 +66,7 @@ async def get_podcast_list(db_session: Session = Depends(database.get_db_session
     db_podcasts = CRUD.get_podcast_list(db_session)
     def to_podcast_response(item: models.Podcast):
         return PodcastResponse(
+            id=item.id,
             title=item.title,
             status=item.status,
             file_path=item.file_path,

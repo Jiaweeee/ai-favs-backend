@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session, defer, joinedload
 from typing import List
-from . import models, schemas
+from ...db import models
+from app.apis.collection import schemas
 
 # Collection
 def get_collections(session: Session, exclude_fields: List[str] = []):

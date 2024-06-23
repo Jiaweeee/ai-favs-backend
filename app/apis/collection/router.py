@@ -1,11 +1,12 @@
 from fastapi import APIRouter, BackgroundTasks, Query, Depends
 from typing import Optional
+from app.apis.collection import crud
 from app.apis.schemas import BaseResponse
-from .schemas import AddCollectionBody, DeleteCollectionBody
+from .schemas import AddCollectionBody, DeleteCollectionBody, CollectionCreate
 from app.utils import vectorstore, tools as Tools
 from .processors import WeChatArticleProcessor
 import re, logging
-from app.db import crud, database, schemas, models
+from app.db import database, models
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -114,7 +115,7 @@ async def add_collection(
     else:
         data = await processor.run_async(url)
         new_collection = crud.create_collection(
-            data=schemas.CollectionCreate(**data),
+            data=CollectionCreate(**data),
             session=db
         )
         background_tasks.add_task(generate_and_save_tags, new_collection.id, db)
