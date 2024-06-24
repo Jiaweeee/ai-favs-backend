@@ -30,10 +30,15 @@ class Base(DeclarativeBase):
         session.delete(self)
         session.commit()
 
+class User(Base):
+    __tablename__ = "users"
+
+    username: Mapped[str] = mapped_column(String(64), unique=True, nullable=True)
+
 class Collection(Base):
     __tablename__ = "collections"
 
-    url: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    url: Mapped[str] = mapped_column(String(255), unique=False, nullable=False)
     title: Mapped[str] = mapped_column(String(255), nullable=True, default=None)
     description: Mapped[str] = mapped_column(Text, nullable=True, default=None)
     thumbnail_url: Mapped[str] = mapped_column(String(512), nullable=True, default=None)
@@ -55,22 +60,25 @@ class Collection(Base):
         uselist=False,
         lazy="selectin"
     )
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 class Tag(Base):
     __tablename__ = "tags"
 
-    name: Mapped[str] = mapped_column(String(16), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(16), unique=False, nullable=False)
     collections: Mapped[list["Collection"]] = relationship(
         secondary="collections_tags",
         back_populates="tags"
     )
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 class Category(Base):
     __tablename__ = "categories"
 
-    name: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(64), unique=False, nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=True, default=None)
     collections: Mapped[list["Collection"]] = relationship(back_populates="category")
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 class PodcastStatus(enum.Enum):
     GENERATING = 1
@@ -91,6 +99,7 @@ class Podcast(Base):
     collection: Mapped["Collection"] = relationship(
         back_populates="podcast"
     )
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
 collections_tags = Table("collections_tags", Base.metadata,
     Column("collection_id", String(255), ForeignKey("collections.id"), primary_key=True),

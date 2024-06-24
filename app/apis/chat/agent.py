@@ -39,7 +39,7 @@ class StreamEndEvent(AgentStreamEvent):
     output: str
     
 class QuestionAnswerAgent:
-    def __init__(self) -> None:
+    def __init__(self, user_id: str) -> None:
         self.prompt = """
         You are a helpful assistant. There's a local knowledge base that you can access. \
         If you not sure about the answer of a user query, you should ALWAYS search the local \
@@ -47,7 +47,7 @@ class QuestionAnswerAgent:
         """
         self.tools = [
             WebSearch().get(),
-            VectorStoreSearch().get()
+            VectorStoreSearch(index_name=user_id).get()
         ]
 
     def _get_executor(self) -> AgentExecutor:

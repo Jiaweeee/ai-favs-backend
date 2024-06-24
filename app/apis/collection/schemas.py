@@ -11,6 +11,7 @@ class CollectionBase(BaseModel):
     url: str
 
 class CollectionCreate(CollectionBase):
+    user_id: str
     title: Optional[str] = None
     description: Optional[str] = None
     thumbnail_url: Optional[str] = None

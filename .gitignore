@@ -3,4 +3,3 @@ poetry.lock
 demo/*
 app/public/*
 app/db/files/*
-app/vectorestore/*

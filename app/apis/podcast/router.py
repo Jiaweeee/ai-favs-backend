@@ -1,9 +1,10 @@
-from fastapi import APIRouter, BackgroundTasks, Depends
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status as HttpStatus
 from .schemas import PodcastCreateRequestBody, PodcastResponse
 from app.utils import tts as TTS
 from app.db import database, models
 from app.apis.schemas import BaseResponse
 from app.apis.podcast import crud as CRUD
+from app.apis.dependencies import get_current_user
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -27,43 +28,60 @@ def generate_podcast_audio(podcast_id: str, db_session: Session):
 async def create_podcast(
     body: PodcastCreateRequestBody,
     background_tasks: BackgroundTasks,
-    db_session: Session = Depends(database.get_db_session)
+    db_session: Session = Depends(database.get_db_session),
+    current_user: models.User = Depends(get_current_user)
 ):
     collection_id = body.collection_id
     collection = models.Collection.get(
         id_=collection_id,
         session=db_session
     )
+    if not collection:
+        raise HTTPException(
+            status_code=HttpStatus.HTTP_404_NOT_FOUND,
+            detail="Collection not found."
+        )
+    if collection.user_id != current_user.id:
+        raise HTTPException(
+            status_code=HttpStatus.HTTP_400_BAD_REQUEST,
+            detail="Invalid collection id."
+        )
     if not collection.podcast:
         podcast = CRUD.create_podcast_from_collection(
             collection_id=collection_id,
             session=db_session
         )
     else:
-        status = collection.podcast.status
-        if status == models.PodcastStatus.ERROR.value:
+        podcast_status = collection.podcast.status
+        if podcast_status == models.PodcastStatus.ERROR.value:
             podcast = collection.podcast
             podcast.status = models.PodcastStatus.GENERATING.value
             podcast.save(db_session)
-        elif status == models.PodcastStatus.GENERATING.value:
+        elif podcast_status == models.PodcastStatus.GENERATING.value:
             return BaseResponse(
-                code=200,
+                code=HttpStatus.HTTP_200_OK,
                 msg="Podcast generation in progress, please check again later."
             )
         else:
-            return BaseResponse(
-                code=500,
-                msg="Podcast already created."
+            raise HTTPException(
+                status_code=HttpStatus.HTTP_409_CONFLICT,
+                detail="Podcast already created."
             )
     background_tasks.add_task(generate_podcast_audio, podcast.id, db_session)
     return BaseResponse(
-        code=200,
+        code=HttpStatus.HTTP_200_OK,
         msg="success"
     )
     
 @router.get("/podcast/list/get", response_model=BaseResponse)
-async def get_podcast_list(db_session: Session = Depends(database.get_db_session)):
-    db_podcasts = CRUD.get_podcast_list(db_session)
+async def get_podcast_list(
+    db_session: Session = Depends(database.get_db_session),
+    current_user: models.User = Depends(get_current_user)
+):
+    db_podcasts = CRUD.get_podcast_list(
+        user_id=current_user.id,
+        session=db_session
+    )
     def to_podcast_response(item: models.Podcast):
         return PodcastResponse(
             id=item.id,
@@ -77,7 +95,7 @@ async def get_podcast_list(db_session: Session = Depends(database.get_db_session
 
     podcasts = list(map(lambda x: to_podcast_response(x), db_podcasts))
     return BaseResponse(
-        code=200,
+        code=HttpStatus.HTTP_200_OK,
         data=podcasts
     )
 

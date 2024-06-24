@@ -17,7 +17,8 @@ def summary_tool(text: str):
     """Returns the summary of the given text."""
     llm = LLM.get_simple_model(long_context=len(text) > 8192)
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Summarize the following text concisely, focusing on the main points and key information."),
+        ("system", "Summarize the following text concisely, focusing on the main points and key information.\
+                    Remember, the language of the returned content should be the same as the original input."),
         ("user", "{input}")
     ])
     chain = prompt | llm | StrOutputParser()
@@ -27,7 +28,8 @@ def rewrite_tool(text: str, instruction: str):
     """Rewrites the given text according to the instruction"""
     llm = LLM.get_simple_model(long_context=len(text) > 8192)
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Rewrite the following text according to the given instruction."),
+        ("system", "Rewrite the following text according to the given instruction.\
+                    Remember, the language of the returned content should be the same as the original input."),
         ("user", "Instruction: {instruction}"),
         ("user", "Text: {text}")
     ])

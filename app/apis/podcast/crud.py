@@ -1,4 +1,4 @@
-from .schemas import PodcastCreate
+# from .schemas import PodcastCreate
 from app.db.models import Collection, Podcast, PodcastStatus
 from sqlalchemy.orm import Session
 
@@ -8,8 +8,12 @@ def get_podcast(id_: str, session: Session):
         return podcast
     raise ValueError("Podcast not found.")
 
-def get_podcast_list(session: Session):
-    return session.query(Podcast).all()
+def get_podcast_list(user_id: str, session: Session):
+    return session.query(Podcast)\
+        .filter(
+            Podcast.user_id == user_id
+        )\
+        .all()
 
 def create_podcast_from_collection(
     collection_id: str,
@@ -18,11 +22,11 @@ def create_podcast_from_collection(
     collection = Collection.get(session=session, id_=collection_id)
     if not collection:
         raise ValueError("Collection not found.")
-    create_obj = PodcastCreate(
+    podcast = Podcast(
         title=collection.title,
-        status=PodcastStatus.GENERATING.value
+        status=PodcastStatus.GENERATING.value,
+        user_id=collection.user_id
     )
-    podcast = Podcast(**create_obj.dict())
     podcast.collection = collection
     return podcast.save(session)
 

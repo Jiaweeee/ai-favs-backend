@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from .apis.chat.router import router as chat_router
 from .apis.collection.router import router as collection_router
 from .apis.podcast.router import router as podcast_router
+from .apis.user.router import router as user_router
 from .db import models, database
 import logging, os
 
@@ -28,9 +30,32 @@ vector_store_dir = "app/vectorestore"
 os.makedirs(vector_store_dir, exist_ok=True)
 
 # include routers
+app.include_router(user_router)
 app.include_router(chat_router)
 app.include_router(collection_router)
 app.include_router(podcast_router)
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "code": exc.status_code,
+            "message": exc.detail,
+            "data": None
+        }
+    )
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "code": status.HTTP_500_INTERNAL_SERVER_ERROR,
+            "message": "Internal Server Error",
+            "data": None
+        }
+    )
 
 @app.get("/")
 async def root():
