@@ -1,7 +1,8 @@
 import uuid, enum
-from sqlalchemy import String, Text, ForeignKey, Table, Column, Integer
+from sqlalchemy import String, Text, ForeignKey, Table, Column, Integer, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session, relationship
 from typing import Optional, Type, TypeVar
+from datetime import datetime, timezone
 
 T = TypeVar("T", bound="Base")
 
@@ -13,6 +14,17 @@ class Base(DeclarativeBase):
         primary_key=True,
         default=lambda _: str(uuid.uuid4()),
         unique=True,
+        nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
         nullable=False
     )
 
