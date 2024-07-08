@@ -6,6 +6,7 @@ from .apis.chat.router import router as chat_router
 from .apis.collection.router import router as collection_router
 from .apis.podcast.router import router as podcast_router
 from .apis.user.router import router as user_router
+from .apis.assistant.router import router as assistant_router
 from .db import models, database
 import logging, os
 
@@ -34,6 +35,7 @@ app.include_router(user_router)
 app.include_router(chat_router)
 app.include_router(collection_router)
 app.include_router(podcast_router)
+app.include_router(assistant_router)
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
