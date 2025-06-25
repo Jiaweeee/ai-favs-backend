@@ -5,6 +5,7 @@ class OpenAIModelName(str, enum.Enum):
     GPT3_5_TURBO = "gpt-3.5-turbo"
     GPT3_5_TURBP_16K = "gpt-3.5-turbo-16k"
     GPT4_O = "gpt-4o"
+    GPT4_O_MINI = "gpt-4o-mini"
 
 class MoonshotModelName(str, enum.Enum):
     """
@@ -31,8 +32,8 @@ def get_simple_model(long_context: bool = False):
     It should not be used for tasks like function calling or output strucured data.
     For those tasks, use `get_tool_calling_model` instead.
     """
-    if long_context:
-        model_name = OpenAIModelName.GPT3_5_TURBP_16K
-    else:
-        model_name = OpenAIModelName.GPT3_5_TURBO
-    return ChatOpenAI(model=model_name)
+    # if long_context:
+    #     model_name = OpenAIModelName.GPT3_5_TURBP_16K
+    # else:
+    #     model_name = OpenAIModelName.GPT3_5_TURBO
+    return ChatOpenAI(model=OpenAIModelName.GPT4_O_MINI)
