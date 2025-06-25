@@ -54,7 +54,44 @@ python demo/chat.py
 然后输入问题即可，输入 quit 退出
 
 ## 4. Docker 部署
-build image
+
+### 4.1 使用 Docker Compose（推荐）
+
+1. **准备环境变量**
+```bash
+cp env.example .env
 ```
+编辑 `.env` 文件，填入您的配置（至少需要配置 OPENAI_API_KEY）
+
+2. **启动服务**
+```bash
+docker-compose up -d
+```
+
+3. **访问应用**
+- 应用地址：http://localhost:8080
+- API 文档：http://localhost:8080/docs
+
+4. **常用命令**
+```bash
+# 查看日志
+docker-compose logs -f
+
+# 停止服务
+docker-compose down
+
+# 重启服务
+docker-compose restart
+```
+
+### 4.2 使用 Docker（手动）
+
+build image
+```bash
 docker build -t ai-favs .
+```
+
+run container
+```bash
+docker run -p 8080:8080 --env-file .env ai-favs
 ```
