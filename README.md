@@ -1,97 +1,264 @@
-# AiFavs
+# AI Favs Backend
 
-## 1. 本地运行
-### 1.1 安装 poetry
-本项目使用 poetry 作为包管理工具，使用 poetry 安装依赖后可以自动创建虚拟环境。如果已经安装了 poetry 可以忽略这一步。通过 pipx 安装：
+<div align="center">
+  <h1>🤖 AI Favs</h1>
+  <p>An intelligent content management system powered by AI</p>
+  
+  ![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+  ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green.svg)
+  ![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)
+  ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+</div>
+
+## ✨ Features
+
+- 🔗 **Smart Content Collection**: Automatically extract and process articles from WeChat Official Accounts
+- 🤖 **AI-Powered Organization**: Auto-categorization and tagging using advanced language models
+- 💬 **Intelligent Chat**: RAG-powered conversational interface for your collected content
+- 🎙️ **Podcast Generation**: Convert articles to audio podcasts with TTS
+- 🔍 **Vector Search**: Semantic search through your knowledge base
+- 🏷️ **Smart Categorization**: Automatic content classification and tagging
+- 📱 **RESTful API**: Complete REST API with OpenAPI documentation
+
+## 🛠 Tech Stack
+
+- **Framework**: FastAPI (Python 3.11+)
+- **Database**: SQLAlchemy with SQLite
+- **AI/ML**: LangChain, OpenAI GPT, FAISS Vector Store
+- **Background Tasks**: FastAPI BackgroundTasks
+- **Web Scraping**: Playwright
+- **Audio Processing**: Pydub, TTS
+- **Containerization**: Docker & Docker Compose
+- **Database Migration**: Alembic
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.11+
+- Poetry (for dependency management)
+- Docker & Docker Compose (optional)
+- OpenAI API Key
+
+### Option 1: Local Development
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/your-username/ai-favs-backend.git
+cd ai-favs-backend
 ```
+
+2. **Install Poetry** (if not already installed)
+```bash
+# Via pipx (recommended)
 pipx install poetry
-```
-或者通过 homebrew 安装：
-```
+
+# Via Homebrew (macOS)
 brew install poetry
 ```
 
-### 1.2 安装依赖
-在项目根目录，运行以下命令安装依赖：
-```
+3. **Install dependencies**
+```bash
 poetry install
 ```
 
-### 1.3 运行本地服务
-安装好依赖后，poetry 会自动创建虚拟环境。现在可以使用 langchain-cli 命令行工具运行服务：
+4. **Set up environment variables**
+```bash
+cp .env.example .env
+# Edit .env file with your configuration
 ```
-langchain serve
-```
-或：
-```
+
+5. **Run the application**
+```bash
+# Using poetry
+poetry run uvicorn app.server:app --reload
+
+# Or using langchain serve
 poetry run langchain serve
 ```
-有如下输出说明服务成功运行：
-```
-INFO:     Will watch for changes in these directories: ['/Users/jiawei.an/code/ai-knowledge-assistant']
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [59256] using StatReload
-INFO:     Started server process [59260]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-```
 
-## 2. 接口调试
-在浏览器输入 http://127.0.0.1:8000/docs 可以查看当前项目中所有接口的文档：
-![](./img/docs.png)
+6. **Access the application**
+- API: http://localhost:8000
+- Interactive API docs: http://localhost:8000/docs
 
-展开接口文档，点击右上角 "try it out" 按钮可以发送请求调试接口：
-![](./img/docs_try_it_out.png)
+### Option 2: Docker Deployment (Recommended)
 
-## 3. 本地运行 chat 脚本
-目前项目中有一个 /chat 接口，它接收用户当前的提问和之前的聊天历史作为 context，用 RAG + LLM 输出回答。为方便本地测试，我们可以直接在终端运行脚本来进行问答。在项目根目录运行下面命令：
-```
-python demo/chat.py
-```
-等待一段时间后，出现下面内容：
-![](./img/run_chat_locally.png)
-
-然后输入问题即可，输入 quit 退出
-
-## 4. Docker 部署
-
-### 4.1 使用 Docker Compose（推荐）
-
-1. **准备环境变量**
+1. **Clone and configure**
 ```bash
-cp env.example .env
+git clone https://github.com/your-username/ai-favs-backend.git
+cd ai-favs-backend
+cp .env.example .env
+# Edit .env with your configuration
 ```
-编辑 `.env` 文件，填入您的配置（至少需要配置 OPENAI_API_KEY）
 
-2. **启动服务**
+2. **Deploy with Docker Compose**
 ```bash
 docker-compose up -d
 ```
 
-3. **访问应用**
-- 应用地址：http://localhost:8080
-- API 文档：http://localhost:8080/docs
+3. **Access the application**
+- API: http://localhost:8080
+- Interactive API docs: http://localhost:8080/docs
 
-4. **常用命令**
-```bash
-# 查看日志
-docker-compose logs -f
+## 📁 Project Structure
 
-# 停止服务
-docker-compose down
-
-# 重启服务
-docker-compose restart
+```
+ai-favs-backend/
+├── app/
+│   ├── apis/                    # API routes and endpoints
+│   │   ├── assistant/          # AI assistant functionality
+│   │   ├── chat/               # Chat and conversation handling
+│   │   ├── collection/         # Content collection management
+│   │   ├── podcast/            # Podcast generation
+│   │   └── user/               # User management
+│   ├── db/                     # Database models and configuration
+│   ├── utils/                  # Utility functions (LLM, vectorstore, etc.)
+│   └── server.py               # FastAPI application entry point
+├── migrations/                 # Database migrations
+├── demo/                       # Demo scripts and examples
+├── docker-compose.yml          # Docker Compose configuration
+├── Dockerfile                  # Docker image configuration
+└── pyproject.toml             # Python dependencies and configuration
 ```
 
-### 4.2 使用 Docker（手动）
+## 🔧 Configuration
 
-build image
+Create a `.env` file in the project root with the following variables:
+
+```env
+# OpenAI Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Database Configuration
+DATABASE_URL=sqlite:///./app/db/files/ai_favs.db
+
+# Application Settings
+DEBUG=True
+PORT=8000
+
+# Optional: LangSmith for monitoring
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=your_langsmith_api_key
+```
+
+## 📚 API Documentation
+
+### Core Endpoints
+
+- **Collections**
+  - `POST /collection/add` - Add new content to collection
+  - `GET /collection/list/get` - Retrieve collections with filtering
+  - `GET /collection/overview` - Get collections overview with categories
+
+- **Chat**
+  - `POST /chat` - Send chat messages with RAG
+  - `POST /chat/stream` - Streaming chat responses
+  - `GET /chat/followups/get` - Get suggested follow-up questions
+
+- **Assistant**
+  - `POST /assistant/query` - Query the AI assistant
+
+- **Podcasts**
+  - `POST /podcast/generate` - Generate podcast from content
+  - `GET /podcast/list` - List user podcasts
+
+### Interactive API Documentation
+
+Visit `/docs` endpoint for comprehensive interactive API documentation powered by Swagger UI.
+
+## 🔍 Key Features Explained
+
+### Smart Content Processing
+The system automatically processes WeChat articles by:
+1. Extracting content using Playwright web scraping
+2. Generating AI-powered summaries
+3. Auto-categorizing content based on existing categories
+4. Creating relevant tags using NLP
+5. Storing content in vector database for semantic search
+
+### RAG-Powered Chat
+- Semantic search through your collected content
+- Context-aware responses using your knowledge base
+- Support for chat history and follow-up questions
+- Streaming responses for real-time interaction
+
+### Podcast Generation
+Convert your articles into audio format:
+- Text-to-speech conversion
+- Background processing for large content
+- Audio file management and serving
+
+## 🚢 Deployment
+
+### Production Deployment
+
+1. **Using Docker Compose** (Recommended)
 ```bash
+# Production configuration
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+2. **Manual Deployment**
+```bash
+# Build and run
 docker build -t ai-favs .
-```
-
-run container
-```bash
 docker run -p 8080:8080 --env-file .env ai-favs
 ```
+
+### Health Checks
+
+The application includes health check endpoints:
+- Container health check via wget
+- API health monitoring
+- Database connection validation
+
+## 📊 Database Schema
+
+The application uses SQLAlchemy with the following main models:
+- **User**: User management
+- **Collection**: Content storage and metadata
+- **Category**: Auto-generated content categories
+- **Tag**: Content tagging system
+- **Podcast**: Generated audio content
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow PEP 8 style guidelines
+- Add tests for new features
+- Update documentation as needed
+- Ensure Docker builds successfully
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙋‍♂️ Support
+
+- 📫 Email: your-email@example.com
+- 🐛 Issues: [GitHub Issues](https://github.com/your-username/ai-favs-backend/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/your-username/ai-favs-backend/discussions)
+
+## 🔮 Roadmap
+
+- [ ] Support for more content sources (YouTube, Medium, etc.)
+- [ ] Advanced AI agents with tool usage
+- [ ] Multi-language support
+- [ ] Enhanced search capabilities
+- [ ] Mobile app integration
+- [ ] Collaboration features
+
+---
+
+<div align="center">
+  <p>Built with ❤️ using FastAPI and LangChain</p>
+</div>
