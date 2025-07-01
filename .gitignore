@@ -3,3 +3,4 @@ poetry.lock
 demo/*
 app/public/*
 app/db/files/*
+.env
